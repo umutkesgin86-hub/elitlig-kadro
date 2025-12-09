@@ -205,10 +205,15 @@ app.get("/api/events/:match_id", getEvents);
 app.get("/match/:id", getMatchDetail);
 app.get("/api/match/:id", getMatchDetail);
 
+// en alta yakın bir yerde
+app.post("/lineups", saveLineup);
+app.post("/api/lineups", saveLineup);
+
 /* ---------------------------------------------------
    SERVER ÇALIŞTIR
 --------------------------------------------------- */
 app.listen(PORT, () => {
   console.log(`Supabase bağlı! Sunucu çalışıyor: ${PORT}`);
 });
+
 
