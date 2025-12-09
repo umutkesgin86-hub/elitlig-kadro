@@ -47,27 +47,50 @@ const addMatch = async (req, res) => {
   }
 };
 
-// 3) Kadro kaydet
+/* ---------------------------------------------------
+   3) KADRO KAYDET  (GÜNCEL)
+--------------------------------------------------- */
 const saveLineup = async (req, res) => {
   try {
-    const { match_id, team_side, team_name, players } = req.body;
+    // Hem eski hem yeni frontend isimlerini yakalar
+    const matchId =
+      req.body.match_id ??
+      req.body.matchId ??
+      req.body.match_id?.toString();
+
+    const teamSide = req.body.team_side ?? req.body.teamSide;
+    const teamName = req.body.team_name ?? req.body.teamName;
+    const players =
+      req.body.players ?? req.body.kadro ?? req.body.lineup ?? null;
+
+    if (!matchId || !teamSide || !teamName || !players) {
+      return res.status(400).json({
+        error:
+          "Eksik veri: matchId/match_id, teamSide/team_side, teamName/team_name veya players eksik."
+      });
+    }
 
     const { error } = await supabase.from("lineups").upsert([
       {
-        match_id,
-        team_side,
-        team_name,
+        match_id: Number(matchId),
+        team_side: teamSide,
+        team_name: teamName,
         players_json: JSON.stringify(players)
       }
     ]);
 
-    if (error) return res.status(500).json({ error });
+    if (error) {
+      console.error("Supabase lineups insert hata:", error);
+      return res.status(500).json({ error });
+    }
+
     res.json({ success: true });
   } catch (err) {
-    console.error("POST lineups hata:", err);
+    console.error("Genel lineups hata:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // 4) Maça ait kadroları getir
 // 3) Kadro kaydet  (GÜNCEL VERSİYON)
@@ -215,5 +238,6 @@ app.post("/api/lineups", saveLineup);
 app.listen(PORT, () => {
   console.log(`Supabase bağlı! Sunucu çalışıyor: ${PORT}`);
 });
+
 
 
