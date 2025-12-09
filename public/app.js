@@ -20,6 +20,40 @@ let isMatchAdmin = false;
 let editingMatch = null;
 
 // -----------------------------
+//  POSITIONS (Mevkiler)
+// -----------------------------
+const positions = [
+  { code: "GK", name: "Kaleci" },
+  { code: "LB", name: "Sol Bek" },
+  { code: "LCB", name: "Sol Stoper" },
+  { code: "RCB", name: "Sağ Stoper" },
+  { code: "RB", name: "Sağ Bek" },
+  { code: "CDM", name: "Ön Libero" },
+  { code: "LCM", name: "Sol Orta" },
+  { code: "RCM", name: "Sağ Orta" },
+  { code: "LW", name: "Sol Kanat" },
+  { code: "RW", name: "Sağ Kanat" },
+  { code: "ST", name: "Santrafor" }
+];
+
+// -----------------------------
+//  POSITION COORDINATES (Saha dizilimi)
+// -----------------------------
+const positionCoords = {
+  GK:  { x: 50, y: 90 },
+  LB:  { x: 20, y: 75 },
+  LCB: { x: 40, y: 70 },
+  RCB: { x: 60, y: 70 },
+  RB:  { x: 80, y: 75 },
+  CDM: { x: 50, y: 60 },
+  LCM: { x: 35, y: 50 },
+  RCM: { x: 65, y: 50 },
+  LW:  { x: 25, y: 35 },
+  RW:  { x: 75, y: 35 },
+  ST:  { x: 50, y: 25 }
+};
+
+// -----------------------------
 //  DOM ELEMENTS
 // -----------------------------
 const tabHome       = document.getElementById("tabHome");
@@ -823,3 +857,4 @@ btnAwayRed.onclick    = () => addEvent("away", "red");
   await fetchMatches();
   renderMatches();
 })();
+
