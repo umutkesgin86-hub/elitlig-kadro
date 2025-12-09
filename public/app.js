@@ -1,8 +1,10 @@
-/* ---------------------------------------------------
-    BÖLÜM 1 — GLOBAL STATE + DOM + POZİSYONLAR
-----------------------------------------------------*/
+// ===============================================
+// ELİT LİG — KADRO SİSTEMİ (FINAL FULL VERSION)
+// ===============================================
 
+// -----------------------------
 // GLOBAL STATE
+// -----------------------------
 let matches = [];
 const lineupsCache = {};
 const eventsCache = {};
@@ -15,98 +17,103 @@ let currentDetailMatch = null;
 let currentDetailHomeLineup = null;
 let currentDetailAwayLineup = null;
 
-let isMatchAdmin = false;
 let editingMatch = null;
 
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "1234";
+let isMatchAdmin = false;
 
-// DOM ELEMENTLERİ
-const tabHome       = document.getElementById("tabHome");
-const tabLineups    = document.getElementById("tabLineups");
+// -----------------------------
+// DOM ELEMENTS
+// -----------------------------
+const tabHome = document.getElementById("tabHome");
+const tabLineups = document.getElementById("tabLineups");
 const tabMatchAdmin = document.getElementById("tabMatchAdmin");
 
-const screenHome          = document.getElementById("screen-home");
-const screenLineup        = document.getElementById("screen-lineup");
-const screenPitch         = document.getElementById("screen-pitch");
-const screenLineupsList   = document.getElementById("screen-lineups-list");
+const screenHome = document.getElementById("screen-home");
+const screenLineup = document.getElementById("screen-lineup");
+const screenPitch = document.getElementById("screen-pitch");
+const screenLineupsList = document.getElementById("screen-lineups-list");
 const screenLineupsDetail = document.getElementById("screen-lineups-detail");
-const screenInstagram     = document.getElementById("screen-instagram");
-const screenMatchAdmin    = document.getElementById("screen-match-admin");
+const screenInstagram = document.getElementById("screen-instagram");
+const screenMatchAdmin = document.getElementById("screen-match-admin");
 
 const matchesContainer = document.getElementById("matchesContainer");
+const playersForm = document.getElementById("playersForm");
 
-const playersForm      = document.getElementById("playersForm");
 const lineupMatchTitle = document.getElementById("lineupMatchTitle");
-const lineupMatchSub   = document.getElementById("lineupMatchSub");
+const lineupMatchSub = document.getElementById("lineupMatchSub");
 
-const pitchMatchTitle  = document.getElementById("pitchMatchTitle");
-const pitchMatchSub    = document.getElementById("pitchMatchSub");
+const pitchMatchTitle = document.getElementById("pitchMatchTitle");
+const pitchMatchSub = document.getElementById("pitchMatchSub");
 
+const backToHome = document.getElementById("backToHome");
 const saveLineup = document.getElementById("saveLineup");
-const btnEdit    = document.getElementById("btnEdit");
-const btnExit    = document.getElementById("btnExit");
+const btnEdit = document.getElementById("btnEdit");
+const btnExit = document.getElementById("btnExit");
 
-const lineupsList   = document.getElementById("lineupsList");
+const lineupsList = document.getElementById("lineupsList");
 const backToLineups = document.getElementById("backToLineups");
 
-const pitchSingle     = document.getElementById("pitchSingle");
+const pitchSingle = document.getElementById("pitchSingle");
 const benchListSingle = document.getElementById("benchListSingle");
 
 const detailMatchTitle = document.getElementById("detailMatchTitle");
-const detailMatchSub   = document.getElementById("detailMatchSub");
-const detailHomeTitle  = document.getElementById("detailHomeTitle");
-const detailAwayTitle  = document.getElementById("detailAwayTitle");
+const detailMatchSub = document.getElementById("detailMatchSub");
+const detailHomeTitle = document.getElementById("detailHomeTitle");
+const detailAwayTitle = document.getElementById("detailAwayTitle");
 
 const pitchHome = document.getElementById("pitchHome");
 const pitchAway = document.getElementById("pitchAway");
 const benchHome = document.getElementById("benchHome");
 const benchAway = document.getElementById("benchAway");
 
-// SKORBOARD
-const scoreHomeName  = document.getElementById("scoreHomeName");
-const scoreAwayName  = document.getElementById("scoreAwayName");
+// Scoreboard
+const scoreHomeName = document.getElementById("scoreHomeName");
+const scoreAwayName = document.getElementById("scoreAwayName");
 const scoreHomeValue = document.getElementById("scoreHomeValue");
 const scoreAwayValue = document.getElementById("scoreAwayValue");
 
-// EVENTS
+// Events
 const eventsHomeTitle = document.getElementById("eventsHomeTitle");
 const eventsAwayTitle = document.getElementById("eventsAwayTitle");
 const eventHomePlayer = document.getElementById("eventHomePlayer");
 const eventAwayPlayer = document.getElementById("eventAwayPlayer");
-const btnHomeGoal     = document.getElementById("btnHomeGoal");
-const btnHomeYellow   = document.getElementById("btnHomeYellow");
-const btnHomeRed      = document.getElementById("btnHomeRed");
-const btnAwayGoal     = document.getElementById("btnAwayGoal");
-const btnAwayYellow   = document.getElementById("btnAwayYellow");
-const btnAwayRed      = document.getElementById("btnAwayRed");
-const eventsHomeLog   = document.getElementById("eventsHomeLog");
-const eventsAwayLog   = document.getElementById("eventsAwayLog");
 
-// INSTAGRAM
+const btnHomeGoal = document.getElementById("btnHomeGoal");
+const btnHomeYellow = document.getElementById("btnHomeYellow");
+const btnHomeRed = document.getElementById("btnHomeRed");
+
+const btnAwayGoal = document.getElementById("btnAwayGoal");
+const btnAwayYellow = document.getElementById("btnAwayYellow");
+const btnAwayRed = document.getElementById("btnAwayRed");
+
+const eventsHomeLog = document.getElementById("eventsHomeLog");
+const eventsAwayLog = document.getElementById("eventsAwayLog");
+
+// Insta
 const btnOpenInstagram = document.getElementById("btnOpenInstagram");
-const btnInstaBack     = document.getElementById("btnInstaBack");
+const btnInstaBack = document.getElementById("btnInstaBack");
 const btnInstaDownload = document.getElementById("btnInstaDownload");
-const instaFrame       = document.getElementById("instaFrame");
+const instaFrame = document.getElementById("instaFrame");
 
-// MATCH ADMIN
+// Match Admin
 const matchAdminLoginCard = document.getElementById("matchAdminLoginCard");
 const matchAdminPanelCard = document.getElementById("matchAdminPanelCard");
-const matchAdminUser      = document.getElementById("matchAdminUser");
-const matchAdminPass      = document.getElementById("matchAdminPass");
+const matchAdminUser = document.getElementById("matchAdminUser");
+const matchAdminPass = document.getElementById("matchAdminPass");
 
-const matchDateInput  = document.getElementById("matchDate");
-const matchTimeInput  = document.getElementById("matchTime");
-const matchHomeInput  = document.getElementById("matchHome");
-const matchAwayInput  = document.getElementById("matchAway");
+const matchHomeInput = document.getElementById("matchHome");
+const matchAwayInput = document.getElementById("matchAway");
+const matchDateInput = document.getElementById("matchDate");
+const matchTimeInput = document.getElementById("matchTime");
 const matchFieldInput = document.getElementById("matchField");
-
-const btnAddMatch    = document.getElementById("btnAddMatch");
+const btnAddMatch = document.getElementById("btnAddMatch");
 const matchListAdmin = document.getElementById("matchListAdmin");
 
-/* ---------------------------------------------------
-    POZİSYON HARİTALARI (HATASIZ SÜRÜM)
-----------------------------------------------------*/
+// -----------------------------
+// POSITIONS
+// -----------------------------
 const positions = [
   { code: "GK", name: "Kaleci" },
   { code: "LB", name: "Sol Bek" },
@@ -134,241 +141,120 @@ const positionCoords = {
   RW: { x: 75, y: 35 },
   ST: { x: 50, y: 25 }
 };
-/* ---------------------------------------------------
-    BÖLÜM 2 — UTILS + API FONKSİYONLARI
-----------------------------------------------------*/
 
-// EKRAN DEĞİŞTİR
+// -----------------------------
+// UTILITIES
+// -----------------------------
 function showScreen(name) {
-  [
-    screenHome,
-    screenLineup,
-    screenPitch,
-    screenLineupsList,
-    screenLineupsDetail,
-    screenInstagram,
-    screenMatchAdmin
-  ].forEach(s => s.classList.remove("active"));
+  [screenHome, screenLineup, screenPitch, screenLineupsList, screenLineupsDetail, screenInstagram, screenMatchAdmin]
+    .forEach(s => s.classList.remove("active"));
 
-  document.getElementById(`screen-${name}`)?.classList.add("active");
+  document.getElementById(`screen-${name}`).classList.add("active");
 }
 
-// TARİH FORMATLAYICI
-function formatMatchDateDisplay(match) {
-  if (!match.date) return "";
-
-  const [y, m, d] = match.date.split("-").map(Number);
-  const dt = new Date(y, m - 1, d);
-
-  const dd = String(d).padStart(2, "0");
-  const MM = String(m).padStart(2, "0");
-
-  const gunler = [
-    "Pazar",
-    "Pazartesi",
-    "Salı",
-    "Çarşamba",
-    "Perşembe",
-    "Cuma",
-    "Cumartesi"
-  ];
-
-  return `${dd}.${MM}.${y} ${gunler[dt.getDay()]}`;
+function formatMatchDateDisplay(m) {
+  const [Y, M, D] = m.date.split("-");
+  return `${D}.${M}.${Y}`;
 }
 
-/* ---------------------------------------------------
-    API: MAÇLARI GETİR
-----------------------------------------------------*/
+// -----------------------------
+// API FUNCTIONS
+// -----------------------------
 async function fetchMatches() {
-  try {
-    const res = await fetch("/api/matches");
-    if (!res.ok) throw new Error("Maç listesi çekilemedi");
-    matches = await res.json();
-  } catch (err) {
-    console.error("fetchMatches ERROR:", err);
-    matches = [];
-  }
+  const res = await fetch("/api/matches");
+  matches = await res.json();
 }
 
-/* ---------------------------------------------------
-    API: KADROLARI GETİR
-----------------------------------------------------*/
 async function fetchLineups(matchId) {
-  try {
-    const res = await fetch(`/api/matches/${matchId}/lineups`);
-    if (!res.ok) throw new Error("Lineup JSON okunamadı");
+  const res = await fetch(`/api/matches/${matchId}/lineups`);
+  const raw = await res.json();
 
-    const raw = await res.json();
+  const output = {
+    home: raw.find(x => x.team_side === "home") || null,
+    away: raw.find(x => x.team_side === "away") || null
+  };
 
-    // Supabase → Frontend convert
-    const formatted = {
-      home: raw.find?.(x => x.team_side === "home") || null,
-      away: raw.find?.(x => x.team_side === "away") || null
-    };
+  if (output.home) output.home.players = JSON.parse(output.home.players_json);
+  if (output.away) output.away.players = JSON.parse(output.away.players_json);
 
-    if (formatted.home && formatted.home.players_json) {
-      formatted.home.players = JSON.parse(formatted.home.players_json);
-    }
-    if (formatted.away && formatted.away.players_json) {
-      formatted.away.players = JSON.parse(formatted.away.players_json);
-    }
-
-    lineupsCache[matchId] = formatted;
-    return formatted;
-  } catch (err) {
-    console.error("fetchLineups ERROR:", err);
-    return { home: null, away: null };
-  }
+  lineupsCache[matchId] = output;
+  return output;
 }
 
-/* ---------------------------------------------------
-    API: KADRO KAYDET
-----------------------------------------------------*/
 async function saveLineupToServer(matchId, side, teamName, players) {
-  try {
-    const res = await fetch("/api/lineups", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        match_id: matchId,
-        team_side: side,
-        team_name: teamName,
-        players
-      })
-    });
-
-    return await res.json();
-  } catch (err) {
-    console.error("saveLineupToServer ERROR:", err);
-    return null;
-  }
+  await fetch("/api/lineups", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      match_id: matchId,
+      team_side: side,
+      team_name: teamName,
+      players
+    })
+  });
 }
 
-/* ---------------------------------------------------
-    API: MAÇ OLAYI EKLE
-----------------------------------------------------*/
-async function addEventToServer(matchId, side, type, group, index) {
-  try {
-    const res = await fetch("/api/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        match_id: matchId,
-        team_side: side,
-        event_type: type,
-        player_group: group,
-        player_index: index
-      })
-    });
-
-    return await res.json();
-  } catch (err) {
-    console.error("addEvent ERROR:", err);
-  }
-}
-
-/* ---------------------------------------------------
-    API: MAÇ OLAYLARINI GETİR
-----------------------------------------------------*/
-async function fetchEvents(matchId) {
-  try {
-    const res = await fetch(`/api/events/${matchId}`);
-    if (!res.ok) return [];
-
-    const data = await res.json();
-
-    const grouped = {
-      home: data.filter(e => e.team_side === "home"),
-      away: data.filter(e => e.team_side === "away")
-    };
-
-    eventsCache[matchId] = grouped;
-    return grouped;
-  } catch (err) {
-    console.error("fetchEvents ERROR:", err);
-    return { home: [], away: [] };
-  }
-}
-/* ---------------------------------------------------
-    BÖLÜM 3 — MAÇ LİSTESİ & KADRO GİRİŞİ & SAHA DİZİLİŞ
-----------------------------------------------------*/
-
-/* -----------------------------------------------
-    ANA SAYFADA MAÇLARI LİSTELE
-------------------------------------------------*/
+// -----------------------------
+// RENDER MATCH LIST
+// -----------------------------
 function renderMatches() {
   matchesContainer.innerHTML = "";
 
-  if (!matches || matches.length === 0) {
-    matchesContainer.textContent = "Hiç maç bulunamadı.";
-    return;
-  }
+  matches.forEach(m => {
+    const card = document.createElement("div");
+    card.className = "match-card";
 
-  matches.forEach(match => {
-    const div = document.createElement("div");
-    div.className = "match-card";
-
-    div.innerHTML = `
+    card.innerHTML = `
       <div class="match-header">
-        <span>${match.home_team} vs ${match.away_team}</span>
-        <span>${match.time}</span>
+        <span>${m.home_team} vs ${m.away_team}</span>
+        <span>${m.time}</span>
       </div>
-      <div class="match-meta">
-        ${formatMatchDateDisplay(match)} • ${match.field}
-      </div>
-
+      <div class="match-meta">${formatMatchDateDisplay(m)} • ${m.field}</div>
       <div class="team-buttons">
-        <button class="btn-team" data-id="${match.id}" data-side="home">
-          ${match.home_team} Kaptanı
+        <button class="btn-team" data-side="home" data-id="${m.id}">
+          ${m.home_team} Kaptanı
         </button>
-        <button class="btn-team" data-id="${match.id}" data-side="away">
-          ${match.away_team} Kaptanı
+        <button class="btn-team" data-side="away" data-id="${m.id}">
+          ${m.away_team} Kaptanı
         </button>
       </div>
     `;
 
-    matchesContainer.appendChild(div);
+    matchesContainer.appendChild(card);
   });
 
-  // Buton clickleri
   matchesContainer.querySelectorAll(".btn-team").forEach(btn => {
     btn.onclick = () => {
-      const id = Number(btn.dataset.id);
-      const side = btn.dataset.side;
-
-      currentMatch = matches.find(m => m.id === id);
-      currentTeamSide = side;
-      currentTeamName = side === "home" ? currentMatch.home_team : currentMatch.away_team;
-
+      const id = btn.dataset.id;
+      currentMatch = matches.find(x => x.id == id);
+      currentTeamSide = btn.dataset.side;
+      currentTeamName = currentTeamSide === "home" ? currentMatch.home_team : currentMatch.away_team;
       openLineupScreen();
     };
   });
 }
 
-/* ---------------------------------------------------
-    KADRO GİRİŞİ EKRANINI AÇ
-----------------------------------------------------*/
+// -----------------------------
+// OPEN LINEUP SCREEN
+// -----------------------------
 async function openLineupScreen() {
-  const matchId = currentMatch.id;
-  const lineups = await fetchLineups(matchId);
+  const lu = await fetchLineups(currentMatch.id);
 
   const existing =
-    currentTeamSide === "home"
-      ? lineups.home?.players
-      : lineups.away?.players;
+    currentTeamSide === "home" ? lu.home?.players : lu.away?.players;
+
+  lineupMatchTitle.textContent = `${currentMatch.home_team} vs ${currentMatch.away_team}`;
+  lineupMatchSub.textContent = `${currentTeamName} kadrosu`;
 
   playersForm.innerHTML = "";
 
-  // 12 oyuncu alanı oluştur
   for (let i = 0; i < 12; i++) {
     const isAs = i < 7;
 
-    let name = "";
-    let pos = "";
-    let no = "";
+    let name = "", pos = "", no = "";
 
     if (existing) {
-      const src = isAs ? existing.as?.[i] : existing.yedek?.[i - 7];
+      const src = isAs ? existing.as[i] : existing.yedek[i - 7];
       if (src) {
         name = src.name;
         pos = src.pos;
@@ -386,46 +272,41 @@ async function openLineupScreen() {
 
       <label>İsim Soyisim</label>
       <div class="row-inline">
-        <input class="p-name" value="${name}" placeholder="Oyuncu adı">
+        <input class="p-name" value="${name}">
         <input class="p-no" value="${no}" placeholder="No">
       </div>
 
       <label>Mevki</label>
       <select class="p-pos">
-        <option value="">Mevki seç</option>
-        ${positions
-          .map(
-            p => `<option value="${p.code}" ${p.code === pos ? "selected" : ""}>
-                    ${p.code} - ${p.name}
-                  </option>`
-          )
-          .join("")}
+        <option value="">Seç</option>
+        ${positions.map(p => `
+          <option value="${p.code}" ${p.code === pos ? "selected" : ""}>
+            ${p.code} - ${p.name}
+          </option>`).join("")}
       </select>
     `;
 
     playersForm.appendChild(row);
   }
 
-  lineupMatchTitle.textContent = `${currentMatch.home_team} vs ${currentMatch.away_team}`;
-  lineupMatchSub.textContent = `${currentTeamName} kadro girişi`;
-
   showScreen("lineup");
 }
 
-/* ---------------------------------------------------
-    FORM → KADRO VERİSİ AL
-----------------------------------------------------*/
+// -----------------------------
+// GET LINEUP FROM FORM
+// -----------------------------
 function getLineupFromForm() {
-  const rows = playersForm.querySelectorAll(".player-row");
+  const rows = document.querySelectorAll(".player-row");
 
   const as = [];
   const yedek = [];
-  let hasError = false;
+  let err = false;
 
   rows.forEach((row, idx) => {
     const name = row.querySelector(".p-name").value.trim();
     const no = row.querySelector(".p-no").value.trim();
     const pos = row.querySelector(".p-pos").value;
+
     const isAs = idx < 7;
 
     row.style.background = "transparent";
@@ -433,41 +314,37 @@ function getLineupFromForm() {
     if (isAs) {
       if (!name || !pos) {
         row.style.background = "#450a0a";
-        hasError = true;
+        err = true;
       }
       as.push({ name, pos, no });
     } else {
       if (!name && !pos && !no) return;
       if (!name || !pos) {
         row.style.background = "#450a0a";
-        hasError = true;
+        err = true;
       }
       yedek.push({ name, pos, no });
     }
   });
 
-  if (hasError || as.length < 7) {
-    alert("Lütfen kırmızı işaretli alanları düzeltin. En az 7 As oyuncu zorunludur.");
+  if (err || as.length < 7) {
+    alert("7 As oyuncu zorunludur. Kırmızı alanları düzeltin.");
     return null;
   }
 
   return { as, yedek };
 }
 
-/* ---------------------------------------------------
-    TEK TAKIM SAHA DİZİLİŞİ
-----------------------------------------------------*/
+// -----------------------------
+// RENDER SINGLE PITCH
+// -----------------------------
 function renderSinglePitch(lineup) {
-  [...pitchSingle.querySelectorAll(".player-dot")].forEach(el => el.remove());
+  pitchSingle.querySelectorAll(".player-dot").forEach(el => el.remove());
   benchListSingle.innerHTML = "";
 
-  pitchMatchTitle.textContent =
-    `${currentMatch.home_team} vs ${currentMatch.away_team}`;
+  pitchMatchTitle.textContent = `${currentMatch.home_team} vs ${currentMatch.away_team}`;
+  pitchMatchSub.textContent = `${currentTeamName} – İlk 7 & Yedekler`;
 
-  pitchMatchSub.textContent =
-    `${currentTeamName} — Sahaya diziliş`;
-
-  // AS oyuncular sahaya dizilir
   lineup.as.forEach(p => {
     const c = positionCoords[p.pos];
     if (!c) return;
@@ -486,9 +363,8 @@ function renderSinglePitch(lineup) {
     pitchSingle.appendChild(dot);
   });
 
-  // Yedekler yazdırılır
-  if (!lineup.yedek.length) {
-    benchListSingle.textContent = "Yedek oyuncu girilmemiş.";
+  if (lineup.yedek.length === 0) {
+    benchListSingle.textContent = "Yedek oyuncu yok.";
   } else {
     lineup.yedek.forEach(p => {
       benchListSingle.innerHTML += `
@@ -500,71 +376,82 @@ function renderSinglePitch(lineup) {
   showScreen("pitch");
 }
 
-/* ---------------------------------------------------
-    SAHAYA DİZ BUTONU
-----------------------------------------------------*/
+// -----------------------------
+// SAVE LINEUP BUTTON
+// -----------------------------
 saveLineup.onclick = async () => {
-  const lineup = getLineupFromForm();
-  if (!lineup) return;
+  const data = getLineupFromForm();
+  if (!data) return;
 
-  await saveLineupToServer(currentMatch.id, currentTeamSide, currentTeamName, lineup);
-
-  renderSinglePitch(lineup);
+  await saveLineupToServer(currentMatch.id, currentTeamSide, currentTeamName, data);
+  renderSinglePitch(data);
 };
 
+// -----------------------------
+// BACK BUTTON
+// -----------------------------
+backToHome.onclick = () => showScreen("home");
 btnEdit.onclick = () => openLineupScreen();
 btnExit.onclick = () => showScreen("home");
-/* ---------------------------------------------------
-    BÖLÜM 4 — KADROLAR SEKMESİ + MAÇ DETAYI + OLAY GİRİŞİ
-----------------------------------------------------*/
 
-/* ---------------------------------------------------
-    KADROLAR SAYFASINI LİSTELE
-----------------------------------------------------*/
+// -----------------------------
+// TAB: HOME
+// -----------------------------
+tabHome.onclick = async () => {
+  await fetchMatches();
+  renderMatches();
+  showScreen("home");
+};
+
+// -----------------------------
+// TAB: KADROLAR
+// -----------------------------
+tabLineups.onclick = async () => {
+  await fetchMatches();
+  await renderLineupsList();
+  showScreen("lineups-list");
+};
+
+// -----------------------------
+// RENDER LINEUPS LIST
+-----------------------------
 async function renderLineupsList() {
   lineupsList.innerHTML = "";
 
-  for (const match of matches) {
-    const lu = await fetchLineups(match.id);
+  for (const m of matches) {
+    const lu = await fetchLineups(m.id);
 
-    const hasHome = lu.home && lu.home.players;
-    const hasAway = lu.away && lu.away.players;
+    if (!lu.home?.players || !lu.away?.players) continue;
 
-    // Her iki takım da kadro girmişse listeye eklenir
-    if (!hasHome || !hasAway) continue;
+    const div = document.createElement("div");
+    div.className = "match-card";
 
-    const card = document.createElement("div");
-    card.className = "match-card";
-
-    card.innerHTML = `
+    div.innerHTML = `
       <div class="match-header">
-        <span>${match.home_team} vs ${match.away_team}</span>
-        <span>${match.time}</span>
+        <span>${m.home_team} vs ${m.away_team}</span>
+        <span>${m.time}</span>
       </div>
-      <div class="match-meta">${formatMatchDateDisplay(match)} • ${match.field}</div>
-
-      <button class="btn-primary open-detail" data-id="${match.id}">
-        Maçı Aç (İki Kadro)
-      </button>
+      <div class="match-meta">${formatMatchDateDisplay(m)} • ${m.field}</div>
+      <button class="btn-primary" data-id="${m.id}">Maçı Aç</button>
     `;
 
-    lineupsList.appendChild(card);
+    lineupsList.appendChild(div);
   }
 
-  // Click eventleri bağlanıyor
-  lineupsList.querySelectorAll(".open-detail").forEach(btn => {
+  lineupsList.querySelectorAll("button").forEach(btn => {
     btn.onclick = () => openMatchDetail(btn.dataset.id);
   });
 }
 
-/* ---------------------------------------------------
-    MAÇ DETAYINI AÇ (İKİ SAHA + OLAYLAR)
-----------------------------------------------------*/
-async function openMatchDetail(matchId) {
-  const match = matches.find(m => m.id == matchId);
+// -----------------------------
+// OPEN MATCH DETAIL (2 SAHA YAN YANA)
+// -----------------------------
+async function openMatchDetail(id) {
+  const match = matches.find(x => x.id == id);
   currentDetailMatch = match;
 
-  const lu = await fetchLineups(matchId);
+  const lu = await fetchLineups(id);
+
   currentDetailHomeLineup = lu.home.players;
   currentDetailAwayLineup = lu.away.players;
 
@@ -574,20 +461,25 @@ async function openMatchDetail(matchId) {
   detailHomeTitle.textContent = match.home_team;
   detailAwayTitle.textContent = match.away_team;
 
-  renderPitchSide(pitchHome, benchHome, currentDetailHomeLineup);
-  renderPitchSide(pitchAway, benchAway, currentDetailAwayLineup);
+  pitchHome.innerHTML = "";
+  pitchAway.innerHTML = "";
+  benchHome.innerHTML = "";
+  benchAway.innerHTML = "";
 
-  await loadEvents(matchId);
+  renderPitchSide(currentDetailHomeLineup, pitchHome, benchHome);
+  renderPitchSide(currentDetailAwayLineup, pitchAway, benchAway);
+
+  await loadEvents(id);
+  updateScoreboard(id);
+  renderInstagramCard();
+
   showScreen("lineups-detail");
 }
 
-/* ---------------------------------------------------
-    SAHAYI ÇİZEN FONKSİYON (ORTAK)
-----------------------------------------------------*/
-function renderPitchSide(pitchEl, benchEl, lineup) {
-  [...pitchEl.querySelectorAll(".player-dot")].forEach(e => e.remove());
-  benchEl.innerHTML = "";
-
+// -----------------------------
+// RENDER PITCH SIDE
+// -----------------------------
+function renderPitchSide(lineup, pitchEl, benchEl) {
   lineup.as.forEach(p => {
     const c = positionCoords[p.pos];
     if (!c) return;
@@ -606,8 +498,8 @@ function renderPitchSide(pitchEl, benchEl, lineup) {
     pitchEl.appendChild(dot);
   });
 
-  if (!lineup.yedek || lineup.yedek.length === 0) {
-    benchEl.textContent = "Yedek bulunmuyor.";
+  if (!lineup.yedek.length) {
+    benchEl.textContent = "Yedek yok";
   } else {
     lineup.yedek.forEach(p => {
       benchEl.innerHTML += `
@@ -617,167 +509,87 @@ function renderPitchSide(pitchEl, benchEl, lineup) {
   }
 }
 
-/* ---------------------------------------------------
-    OLAYLARI YÜKLE
-----------------------------------------------------*/
+// -----------------------------
+// LOAD EVENTS
+// -----------------------------
 async function loadEvents(matchId) {
   const res = await fetch(`/api/events/${matchId}`);
-  const events = await res.json();
+  const rows = await res.json();
 
   eventsCache[matchId] = {
-    home: events.filter(e => e.team_side === "home"),
-    away: events.filter(e => e.team_side === "away")
+    home: rows.filter(x => x.team_side === "home"),
+    away: rows.filter(x => x.team_side === "away"),
   };
 
-  renderEvents("home");
-  renderEvents("away");
-  updateScoreboard(matchId);
+  renderEvents();
 }
 
-/* ---------------------------------------------------
-    OLAY LOGUNU RENDER ET
-----------------------------------------------------*/
-function renderEvents(side) {
+// -----------------------------
+// RENDER EVENTS
+// -----------------------------
+function renderEvents() {
   const matchId = currentDetailMatch.id;
+
   const cache = eventsCache[matchId];
-  const list = cache[side];
 
-  const lineup =
-    side === "home" ? currentDetailHomeLineup : currentDetailAwayLineup;
+  renderEventsSide(cache.home, eventsHomeLog, currentDetailHomeLineup);
+  renderEventsSide(cache.away, eventsAwayLog, currentDetailAwayLineup);
+}
 
-  const container =
-    side === "home" ? eventsHomeLog : eventsAwayLog;
-
+function renderEventsSide(list, container, lineup) {
   container.innerHTML = "";
 
-  if (!list.length) {
-    container.textContent = "Olay yok.";
-    return;
-  }
+  list.forEach(ev => {
+    const arr = ev.player_group === "as" ? lineup.as : lineup.yedek;
+    const p = arr[ev.player_index];
 
-  list.forEach((ev, idx) => {
-    const targetArr = ev.player_group === "as" ? lineup.as : lineup.yedek;
-    const player = targetArr[ev.player_index];
+    if (!p) return;
 
-    if (!player) return;
+    let icon = ev.event_type === "goal" ? "⚽" :
+               ev.event_type === "yellow" ? "🟨" : "🟥";
 
     const row = document.createElement("div");
     row.className = "event-row";
 
     row.innerHTML = `
-      <div class="event-text">
-        ${player.no ? player.no + " | " : ""}${player.name.toUpperCase()} - ${
-          ev.event_type === "goal" ? "GOL" :
-          ev.event_type === "yellow" ? "SARI KART" :
-          ev.event_type === "red" ? "KIRMIZI KART" : ""
-        }
-      </div>
-      <button class="event-delete-btn" data-idx="${idx}" data-side="${side}">
-        ×
-      </button>
+      <span>${icon} ${p.name.toUpperCase()}</span>
     `;
 
     container.appendChild(row);
   });
-
-  // Silme butonu
-  container.querySelectorAll(".event-delete-btn").forEach(btn => {
-    btn.onclick = () => deleteEvent(side, Number(btn.dataset.idx));
-  });
 }
 
-/* ---------------------------------------------------
-    OLAY SİL
-----------------------------------------------------*/
-async function deleteEvent(side, index) {
-  const matchId = currentDetailMatch.id;
-  const events = eventsCache[matchId][side];
-  const ev = events[index];
-
-  await fetch(`/api/events/${ev.id}`, { method: "DELETE" });
-
-  events.splice(index, 1);
-  renderEvents(side);
-  updateScoreboard(matchId);
-}
-
-/* ---------------------------------------------------
-    OLAY EKLEME
-----------------------------------------------------*/
+// -----------------------------
+// ADD EVENT
+// -----------------------------
 async function addEvent(side, type) {
   const matchId = currentDetailMatch.id;
-  const lineup =
-    side === "home" ? currentDetailHomeLineup : currentDetailAwayLineup;
 
-  const select =
-    side === "home" ? eventHomePlayer : eventAwayPlayer;
+  const select = side === "home" ? eventHomePlayer : eventAwayPlayer;
+  const lineup = side === "home" ? currentDetailHomeLineup : currentDetailAwayLineup;
 
-  const value = select.value;
+  const val = select.value;
+  if (!val) return alert("Oyuncu seçin");
 
-  if (!value) {
-    alert("Lütfen oyuncu seç.");
-    return;
-  }
+  const [group, index] = val.split("-");
 
-  const [group, idx] = value.split("-");
-
-  const res = await fetch(`/api/events`, {
+  await fetch(`/api/events`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
       match_id: matchId,
       team_side: side,
       event_type: type,
       player_group: group,
-      player_index: Number(idx)
+      player_index: Number(index)
     })
   });
 
   await loadEvents(matchId);
+  updateScoreboard(matchId);
+  renderInstagramCard();
 }
 
-/* ---------------------------------------------------
-    AÇILABİLİR OYUNCU LİSTESİ (SELECT)
-----------------------------------------------------*/
-function fillPlayerSelect(selectEl, lineup) {
-  selectEl.innerHTML = '<option value="">Oyuncu seç</option>';
-
-  lineup.as.forEach((p, idx) => {
-    selectEl.innerHTML += `
-      <option value="as-${idx}">
-        ${p.no ? p.no + " | " : ""}${p.name.toUpperCase()} (${p.pos})
-      </option>
-    `;
-  });
-
-  lineup.yedek.forEach((p, idx) => {
-    selectEl.innerHTML += `
-      <option value="yedek-${idx}">
-        [Yedek] ${p.no ? p.no + " | " : ""}${p.name.toUpperCase()} (${p.pos})
-      </option>
-    `;
-  });
-}
-
-/* ---------------------------------------------------
-    SKORBOARD GÜNCELLE
-----------------------------------------------------*/
-function updateScoreboard(matchId) {
-  const ev = eventsCache[matchId];
-
-  const homeScore = ev.home.filter(e => e.event_type === "goal").length;
-  const awayScore = ev.away.filter(e => e.event_type === "goal").length;
-
-  scoreHomeName.textContent = currentDetailMatch.home_team;
-  scoreAwayName.textContent = currentDetailMatch.away_team;
-
-  scoreHomeValue.textContent = homeScore;
-  scoreAwayValue.textContent = awayScore;
-}
-
-/* ---------------------------------------------------
-    GOL / KART BUTONLARI BAĞLAMA
-----------------------------------------------------*/
 btnHomeGoal.onclick   = () => addEvent("home", "goal");
 btnHomeYellow.onclick = () => addEvent("home", "yellow");
 btnHomeRed.onclick    = () => addEvent("home", "red");
@@ -786,120 +598,145 @@ btnAwayGoal.onclick   = () => addEvent("away", "goal");
 btnAwayYellow.onclick = () => addEvent("away", "yellow");
 btnAwayRed.onclick    = () => addEvent("away", "red");
 
-/* ---------------------------------------------------
-    GERİ DÖNME BUTONLARI
-----------------------------------------------------*/
-backToLineups.onclick = () => {
-  showScreen("lineups-list");
-};
-/* ---------------------------------------------------
-    BÖLÜM 5 — INSTAGRAM MAÇ GÖRSELİ
-----------------------------------------------------*/
+// -----------------------------
+// SCOREBOARD
+// -----------------------------
+function updateScoreboard(matchId) {
+  const cache = eventsCache[matchId] || { home: [], away: [] };
 
-// Fotoğraf input
-const instaPhotoInput = document.getElementById("instaPhotoInput");
-const instaPhoto      = document.getElementById("instaPhoto");
+  const h = cache.home.filter(x => x.event_type === "goal").length;
+  const a = cache.away.filter(x => x.event_type === "goal").length;
 
-// Foto seçince ekrana ekle
-instaPhotoInput.onchange = e => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    instaPhoto.src = reader.result;
-    instaPhoto.style.display = "block";
-  };
-  reader.readAsDataURL(file);
-};
-
-/* ---------------------------------------------------
-    INSTAGRAM KARTINI OLUŞTUR
-----------------------------------------------------*/
-function renderInstagramCard() {
-  if (!currentDetailMatch) return;
-
-  const match = currentDetailMatch;
-
-  // Tarih formatı
-  const [y, m, d] = match.date.split("-").map(Number);
-  const dateObj = new Date(y, m - 1, d);
-  const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
-  const tarihYazi = `${d}.${m}.${y} • ${gunler[dateObj.getDay()].toUpperCase()}`;
-
-  // Skor
-  const ev = eventsCache[match.id] || { home: [], away: [] };
-  const homeScore = ev.home.filter(e => e.event_type === "goal").length;
-  const awayScore = ev.away.filter(e => e.event_type === "goal").length;
-
-  document.getElementById("instaHomeName").textContent = match.home_team.toUpperCase();
-  document.getElementById("instaAwayName").textContent = match.away_team.toUpperCase();
-  document.getElementById("instaScore").textContent = `${homeScore} - ${awayScore}`;
-  document.getElementById("instaBottomInfo").textContent =
-    `${tarihYazi} • ${match.field.toUpperCase()} • ${match.time}`;
-
-  // Olayları yazdır
-  const homeEventsBox = document.getElementById("instaHomeEvents");
-  const awayEventsBox = document.getElementById("instaAwayEvents");
-
-  homeEventsBox.innerHTML = "";
-  awayEventsBox.innerHTML = "";
-
-  function addEventRows(list, sideBox, lineup) {
-    list.forEach(ev => {
-      const player =
-        ev.player_group === "as"
-          ? lineup.as[ev.player_index]
-          : lineup.yedek[ev.player_index];
-
-      if (!player) return;
-
-      let icon = "⚽";
-      if (ev.event_type === "yellow") icon = "🟨";
-      if (ev.event_type === "red") icon = "🟥";
-
-      const div = document.createElement("div");
-      div.textContent = `${icon} ${player.name.toUpperCase()}`;
-      sideBox.appendChild(div);
-    });
-  }
-
-  addEventRows(ev.home, homeEventsBox, currentDetailHomeLineup);
-  addEventRows(ev.away, awayEventsBox, currentDetailAwayLineup);
+  scoreHomeValue.textContent = h;
+  scoreAwayValue.textContent = a;
 }
 
-/* ---------------------------------------------------
-    INSTAGRAM EKRANINA GEÇ
-----------------------------------------------------*/
+// -----------------------------
+// INSTAGRAM CARD BUILDER
+// -----------------------------
+function renderInstagramCard() {
+  const m = currentDetailMatch;
+  const cache = eventsCache[m.id];
+
+  const hGoals = cache.home.filter(x => x.event_type === "goal").length;
+  const aGoals = cache.away.filter(x => x.event_type === "goal").length;
+
+  document.getElementById("instaHomeName").textContent = m.home_team.toUpperCase();
+  document.getElementById("instaAwayName").textContent = m.away_team.toUpperCase();
+  document.getElementById("instaScore").textContent = `${hGoals} - ${aGoals}`;
+  document.getElementById("instaBottomInfo").textContent =
+    `${formatMatchDateDisplay(m)} • ${m.field.toUpperCase()} • ${m.time}`;
+
+  const homeEl = document.getElementById("instaHomeEvents");
+  const awayEl = document.getElementById("instaAwayEvents");
+  homeEl.innerHTML = "";
+  awayEl.innerHTML = "";
+
+  cache.home.forEach(ev => {
+    const p = (ev.player_group === "as" ? currentDetailHomeLineup.as : currentDetailHomeLineup.yedek)[ev.player_index];
+    if (!p) return;
+    const icon = ev.event_type === "goal" ? "⚽" : ev.event_type === "yellow" ? "🟨" : "🟥";
+    homeEl.innerHTML += `<div>${icon} ${p.name.toUpperCase()}</div>`;
+  });
+
+  cache.away.forEach(ev => {
+    const p = (ev.player_group === "as" ? currentDetailAwayLineup.as : currentDetailAwayLineup.yedek)[ev.player_index];
+    if (!p) return;
+    const icon = ev.event_type === "goal" ? "⚽" : ev.event_type === "yellow" ? "🟨" : "🟥";
+    awayEl.innerHTML += `<div>${icon} ${p.name.toUpperCase()}</div>`;
+  });
+}
+
+// -----------------------------
+// INSTAGRAM SCREEN BUTTONS
+// -----------------------------
 btnOpenInstagram.onclick = () => {
   renderInstagramCard();
   showScreen("instagram");
 };
 
-/* ---------------------------------------------------
-    INSTAGRAM GÖRSELİNİ JPG OLARAK İNDİR
-----------------------------------------------------*/
+btnInstaBack.onclick = () => showScreen("lineups-detail");
+
 btnInstaDownload.onclick = async () => {
-  if (!window.html2canvas) {
-    alert("html2canvas yüklenemedi.");
-    return;
-  }
-
-  const canvas = await window.html2canvas(instaFrame, {
-    scale: 2,
-    allowTaint: true,
-    useCORS: true
-  });
-
+  const canvas = await html2canvas(instaFrame, { scale: 2 });
   const link = document.createElement("a");
-  link.download = `elitlig-mac-${currentDetailMatch.id}.jpg`;
-  link.href = canvas.toDataURL("image/jpeg", 0.9);
+  link.download = "mac-sonucu.jpg";
+  link.href = canvas.toDataURL("image/jpeg");
   link.click();
 };
 
-/* ---------------------------------------------------
-    INSTAGRAM SAYFASINDAN GERİ DÖN
-----------------------------------------------------*/
-btnInstaBack.onclick = () => {
-  showScreen("lineups-detail");
+// -----------------------------
+// ADMIN LOGIN
+// -----------------------------
+btnMatchLogin.onclick = () => {
+  const u = matchAdminUser.value.trim();
+  const p = matchAdminPass.value.trim();
+
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    isMatchAdmin = true;
+    matchAdminLoginCard.style.display = "none";
+    matchAdminPanelCard.style.display = "block";
+    renderMatchAdminList();
+  } else {
+    alert("Hatalı giriş!");
+  }
 };
+
+// -----------------------------
+// MATCH ADMIN LIST
+// -----------------------------
+async function renderMatchAdminList() {
+  await fetchMatches();
+  matchListAdmin.innerHTML = "";
+
+  matches.forEach(m => {
+    const row = document.createElement("div");
+    row.style.marginBottom = "6px";
+
+    row.innerHTML = `
+      <span>#${m.id} – ${m.home_team} vs ${m.away_team} • ${formatMatchDateDisplay(m)} • ${m.time}</span>
+    `;
+
+    matchListAdmin.appendChild(row);
+  });
+}
+
+// -----------------------------
+// ADD MATCH (ADMIN)
+// -----------------------------
+btnAddMatch.onclick = async () => {
+  const date = matchDateInput.value;
+  const time = matchTimeInput.value;
+  const home = matchHomeInput.value.trim();
+  const away = matchAwayInput.value.trim();
+  const field = matchFieldInput.value.trim() || "Elit Lig Arena";
+
+  if (!date || !time || !home || !away) {
+    alert("Tüm zorunlu alanları doldurun.");
+    return;
+  }
+
+  await fetch("/api/matches", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ home_team: home, away_team: away, date, time, field })
+  });
+
+  alert("Maç eklendi!");
+
+  matchHomeInput.value = "";
+  matchAwayInput.value = "";
+  matchDateInput.value = "";
+  matchTimeInput.value = "";
+  matchFieldInput.value = "";
+
+  await renderMatchAdminList();
+};
+
+// -----------------------------
+// STARTUP
+// -----------------------------
+(async () => {
+  await fetchMatches();
+  renderMatches();
+})();
