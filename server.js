@@ -1,294 +1,138 @@
-// server.js
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
-const db = require("./db");
+const bodyParser = require("body-parser");
+const supabase = require("./db"); // Supabase client
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Yardımcı promise fonksiyonları
-function run(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve(this); // this.lastID, this.changes
-    });
-  });
-}
-
-function all(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-}
-
-function get(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-}
-
-// Orta katmanlar
 app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
+app.use(express.static("public"));
 
+/* ---------------------------------------------------
+   1) TÜM MAÇLARI GETİR
+--------------------------------------------------- */
+app.get("/matches", async (req, res) => {
+  const { data, error } = await supabase
+    .from("matches")
+    .select("*")
+    .order("id", { ascending: false });
 
-// ---------- API: Maçlar ----------
-
-// Tüm maçlar
-app.get("/api/matches", async (req, res) => {
-  try {
-    const rows = await all(
-      `SELECT id, home_team, away_team, date, time, field
-       FROM matches
-       ORDER BY date DESC, time DESC, id DESC`
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error("GET /api/matches hata:", err);
-    res.status(500).json({ error: "Maçlar alınamadı." });
-  }
+  if (error) return res.status(500).json({ error });
+  res.json(data);
 });
 
-// Yeni maç ekle
-app.post("/api/matches", async (req, res) => {
-  try {
-    const { home_team, away_team, date, time, field } = req.body || {};
-    if (!home_team || !away_team || !date || !time) {
-      return res.status(400).json({ error: "Eksik alanlar var." });
+/* ---------------------------------------------------
+   2) MAÇ EKLE
+--------------------------------------------------- */
+app.post("/matches", async (req, res) => {
+  const { home_team, away_team, date, time, field } = req.body;
+
+  const { data, error } = await supabase.from("matches").insert([
+    { home_team, away_team, date, time, field }
+  ]);
+
+  if (error) return res.status(500).json({ error });
+  res.json({ success: true, match: data[0] });
+});
+
+/* ---------------------------------------------------
+   3) KADRO KAYDET
+--------------------------------------------------- */
+app.post("/lineups", async (req, res) => {
+  const { match_id, team_side, team_name, players } = req.body;
+
+  const { data, error } = await supabase.from("lineups").upsert([
+    {
+      match_id,
+      team_side,
+      team_name,
+      players_json: JSON.stringify(players)
     }
+  ]);
 
-    const result = await run(
-      `INSERT INTO matches (home_team, away_team, date, time, field)
-       VALUES (?, ?, ?, ?, ?)`,
-      [home_team, away_team, date, time, field || "Elit Lig Arena"]
-    );
-
-    const match = await get(
-      `SELECT id, home_team, away_team, date, time, field
-       FROM matches WHERE id = ?`,
-      [result.lastID]
-    );
-    res.json(match);
-  } catch (err) {
-    console.error("POST /api/matches hata:", err);
-    res.status(500).json({ error: "Maç eklenemedi." });
-  }
+  if (error) return res.status(500).json({ error });
+  res.json({ success: true });
 });
 
-// Maç güncelle
-app.put("/api/matches/:id", async (req, res) => {
-  try {
-    const matchId = Number(req.params.id);
-    const { home_team, away_team, date, time, field } = req.body || {};
-    if (!home_team || !away_team || !date || !time) {
-      return res.status(400).json({ error: "Eksik alanlar var." });
+/* ---------------------------------------------------
+   4) MAÇA AİT KADROLARI GETİR
+--------------------------------------------------- */
+app.get("/lineups/:match_id", async (req, res) => {
+  const { match_id } = req.params;
+
+  const { data, error } = await supabase
+    .from("lineups")
+    .select("*")
+    .eq("match_id", match_id);
+
+  if (error) return res.status(500).json({ error });
+
+  const formatted = data.map(l => ({
+    ...l,
+    players: JSON.parse(l.players_json)
+  }));
+
+  res.json(formatted);
+});
+
+/* ---------------------------------------------------
+   5) OLAY EKLE (Gol / Sarı / Kırmızı)
+--------------------------------------------------- */
+app.post("/events", async (req, res) => {
+  const { match_id, team_side, event_type, player_group, player_index } =
+    req.body;
+
+  const { error } = await supabase.from("events").insert([
+    {
+      match_id,
+      team_side,
+      event_type,
+      player_group,
+      player_index
     }
+  ]);
 
-    await run(
-      `UPDATE matches
-       SET home_team = ?, away_team = ?, date = ?, time = ?, field = ?
-       WHERE id = ?`,
-      [home_team, away_team, date, time, field || "Elit Lig Arena", matchId]
-    );
-
-    const match = await get(
-      `SELECT id, home_team, away_team, date, time, field
-       FROM matches WHERE id = ?`,
-      [matchId]
-    );
-    res.json(match);
-  } catch (err) {
-    console.error("PUT /api/matches/:id hata:", err);
-    res.status(500).json({ error: "Maç güncellenemedi." });
-  }
+  if (error) return res.status(500).json({ error });
+  res.json({ success: true });
 });
 
+/* ---------------------------------------------------
+   6) MAÇA AİT OLAYLARI GETİR
+--------------------------------------------------- */
+app.get("/events/:match_id", async (req, res) => {
+  const { match_id } = req.params;
 
-// ---------- API: Kadrolar ----------
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("match_id", match_id)
+    .order("id", { ascending: true });
 
-// Bir maç için iki takım kadrosu
-app.get("/api/matches/:id/lineups", async (req, res) => {
-  try {
-    const matchId = Number(req.params.id);
-    const rows = await all(
-      `SELECT id, match_id, team_side, team_name, players_json
-       FROM lineups WHERE match_id = ?`,
-      [matchId]
-    );
-
-    const result = { home: null, away: null };
-
-    rows.forEach((row) => {
-      const obj = {
-        id: row.id,
-        match_id: row.match_id,
-        team_side: row.team_side,
-        team_name: row.team_name,
-        players: JSON.parse(row.players_json || "{}")
-      };
-      if (row.team_side === "home") result.home = obj;
-      if (row.team_side === "away") result.away = obj;
-    });
-
-    res.json(result);
-  } catch (err) {
-    console.error("GET /api/matches/:id/lineups hata:", err);
-    res.status(500).json({ error: "Kadrolar alınamadı." });
-  }
+  if (error) return res.status(500).json({ error });
+  res.json(data);
 });
 
-// Kadro kaydet / güncelle (upsert)
-app.post("/api/matches/:id/lineups", async (req, res) => {
-  try {
-    const matchId = Number(req.params.id);
-    const { team_side, team_name, players } = req.body || {};
+/* ---------------------------------------------------
+   7) TEK MAÇ DETAYINI GETİR
+--------------------------------------------------- */
+app.get("/match/:id", async (req, res) => {
+  const { id } = req.params;
 
-    if (!team_side || !team_name || !players) {
-      return res.status(400).json({ error: "Eksik alanlar var." });
-    }
+  const { data, error } = await supabase
+    .from("matches")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-    const playersJson = JSON.stringify(players);
-    const existing = await get(
-      `SELECT id FROM lineups WHERE match_id = ? AND team_side = ?`,
-      [matchId, team_side]
-    );
-
-    if (existing) {
-      await run(
-        `UPDATE lineups
-         SET team_name = ?, players_json = ?
-         WHERE id = ?`,
-        [team_name, playersJson, existing.id]
-      );
-    } else {
-      await run(
-        `INSERT INTO lineups (match_id, team_side, team_name, players_json)
-         VALUES (?, ?, ?, ?)`,
-        [matchId, team_side, team_name, playersJson]
-      );
-    }
-
-    const rows = await all(
-      `SELECT id, match_id, team_side, team_name, players_json
-       FROM lineups WHERE match_id = ?`,
-      [matchId]
-    );
-
-    const result = { home: null, away: null };
-    rows.forEach((row) => {
-      const obj = {
-        id: row.id,
-        match_id: row.match_id,
-        team_side: row.team_side,
-        team_name: row.team_name,
-        players: JSON.parse(row.players_json || "{}")
-      };
-      if (row.team_side === "home") result.home = obj;
-      if (row.team_side === "away") result.away = obj;
-    });
-
-    res.json(result);
-  } catch (err) {
-    console.error("POST /api/matches/:id/lineups hata:", err);
-    res.status(500).json({ error: "Kadro kaydedilemedi." });
-  }
+  if (error) return res.status(500).json({ error });
+  res.json(data);
 });
 
-
-// ---------- API: Olaylar (gol / kart) ----------
-
-// Bir maçın tüm olayları
-app.get("/api/matches/:id/events", async (req, res) => {
-  try {
-    const matchId = Number(req.params.id);
-    const rows = await all(
-      `SELECT id, match_id, team_side, event_type, player_group, player_index, created_at
-       FROM events WHERE match_id = ?
-       ORDER BY id ASC`,
-      [matchId]
-    );
-
-    const result = { home: [], away: [] };
-    rows.forEach((row) => {
-      const obj = {
-        id: row.id,
-        team_side: row.team_side,
-        event_type: row.event_type,
-        player_group: row.player_group,
-        player_index: row.player_index,
-        created_at: row.created_at
-      };
-      if (row.team_side === "home") result.home.push(obj);
-      if (row.team_side === "away") result.away.push(obj);
-    });
-
-    res.json(result);
-  } catch (err) {
-    console.error("GET /api/matches/:id/events hata:", err);
-    res.status(500).json({ error: "Olaylar alınamadı." });
-  }
-});
-
-// Yeni olay ekle
-app.post("/api/matches/:id/events", async (req, res) => {
-  try {
-    const matchId = Number(req.params.id);
-    const { team_side, event_type, player_group, player_index } = req.body || {};
-
-    if (!team_side || !event_type || !player_group || typeof player_index !== "number") {
-      return res.status(400).json({ error: "Eksik alanlar var." });
-    }
-
-    const createdAt = new Date().toISOString();
-
-    const result = await run(
-      `INSERT INTO events (match_id, team_side, event_type, player_group, player_index, created_at)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [matchId, team_side, event_type, player_group, player_index, createdAt]
-    );
-
-    const row = await get(
-      `SELECT id, match_id, team_side, event_type, player_group, player_index, created_at
-       FROM events WHERE id = ?`,
-      [result.lastID]
-    );
-
-    res.json(row);
-  } catch (err) {
-    console.error("POST /api/matches/:id/events hata:", err);
-    res.status(500).json({ error: "Olay eklenemedi." });
-  }
-});
-
-// Olay sil
-app.delete("/api/matches/:id/events/:eventId", async (req, res) => {
-  try {
-    const matchId = Number(req.params.id);
-    const eventId = Number(req.params.eventId);
-
-    await run(
-      `DELETE FROM events WHERE id = ? AND match_id = ?`,
-      [eventId, matchId]
-    );
-
-    res.json({ success: true });
-  } catch (err) {
-    console.error("DELETE /api/matches/:id/events/:eventId hata:", err);
-    res.status(500).json({ error: "Olay silinemedi." });
-  }
-});
-
-
-// ---------- Sunucuyu çalıştır ----------
+/* ---------------------------------------------------
+   SERVER ÇALIŞTIR
+--------------------------------------------------- */
 app.listen(PORT, () => {
-  console.log(`Elit Lig sunucu çalışıyor: http://localhost:${PORT}`);
+  console.log(`Supabase bağlı! Sunucu çalışıyor: ${PORT}`);
 });
