@@ -10,18 +10,15 @@
   <!-- Instagram görseli için html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-  <!-- Frontend JS -->
   <script defer src="app.js"></script>
 </head>
-
 <body>
   <div class="app">
-
     <!-- NAV -->
     <div class="nav">
       <button class="nav-btn active" id="tabHome">Ana Sayfa</button>
       <button class="nav-btn" id="tabLineups">Kadrolar</button>
-      <button class="nav-btn" id="tabMatchAdmin">Maç Girişi Yap</button>
+      <button class="nav-btn" id="tabMatchAdmin">Maç Girişi</button>
     </div>
 
     <!-- ANA SAYFA -->
@@ -31,9 +28,9 @@
       <div id="matchesContainer" class="card"></div>
     </section>
 
-    <!-- KAPTAN KADRO GİRİŞİ -->
+    <!-- KADRO GİRİŞ EKRANI -->
     <section id="screen-lineup" class="screen">
-      <button class="btn-back" id="backToHome">&larr; Günün Maçlarına Dön</button>
+      <button class="btn-back" id="backToHome">&larr; Geri</button>
 
       <div class="card">
         <div class="match-title" id="lineupMatchTitle"></div>
@@ -43,19 +40,23 @@
       <div class="card">
         <h2>Kadro Girişi</h2>
         <p class="info-text">
-          7 As oyuncu zorunlu, yedek oyuncular isteğe bağlıdır. Forma numarası zorunlu değildir.
+          7 As oyuncu ZORUNLUDUR.  
+          Yedek oyuncular isteğe bağlıdır.  
+          Forma numarası isteğe bağlıdır.
         </p>
+
         <div id="playersForm" class="players-wrapper"></div>
+
         <button class="btn-primary" id="saveLineup">Kadroyu Kaydet ve Sahaya Diz</button>
       </div>
     </section>
 
-    <!-- KAPTAN SAHA DİZİLİŞİ -->
+    <!-- TEK TAKIM SAHA DİZİLİŞİ -->
     <section id="screen-pitch" class="screen">
       <div class="card">
         <div class="match-title" id="pitchMatchTitle"></div>
         <div class="match-sub" id="pitchMatchSub"></div>
-        <p class="info-text">Kaptan, kadron başarıyla kaydedildi. Aşağıdan sahadaki dizilişi görebilirsin.</p>
+        <p class="info-text">Kaptan, kadron başarıyla kaydedildi.</p>
       </div>
 
       <div class="card">
@@ -66,10 +67,10 @@
 
         <div class="bench">
           <div class="bench-title">Yedekler</div>
-          <div id="benchListSingle" class="bench-list"></div>
+          <div class="bench-list" id="benchListSingle"></div>
         </div>
 
-        <div style="display:flex; gap:6px; margin-top:6px;">
+        <div style="display:flex; gap:6px;">
           <button class="btn-secondary" id="btnEdit">Düzenle</button>
           <button class="btn-exit" id="btnExit">Kaydet ve Çık</button>
         </div>
@@ -80,14 +81,16 @@
     <section id="screen-lineups-list" class="screen">
       <div class="card">
         <h2>Kadrolar</h2>
-        <p class="info-text">Her iki takım kadro girdiğinde maç burada görünür.</p>
+        <p class="info-text">
+          Her iki takım kadro girdiğinde maç listelenir.
+        </p>
       </div>
       <div id="lineupsList" class="card"></div>
     </section>
 
-    <!-- MAÇ DETAY EKANI (2 TAKIM + SKORBOARD + OLAYLAR) -->
+    <!-- MAÇ DETAYI (2 SAHA + OLAYLAR + SKORBOARD) -->
     <section id="screen-lineups-detail" class="screen">
-      <button class="btn-back" id="backToLineups">&larr; Kadrolara Dön</button>
+      <button class="btn-back" id="backToLineups">&larr; Geri</button>
 
       <div class="card">
         <div class="match-title" id="detailMatchTitle"></div>
@@ -95,6 +98,7 @@
       </div>
 
       <div class="card">
+        <!-- SCOREBOARD -->
         <div class="scoreboard">
           <div class="score-team" id="scoreHomeName"></div>
           <div class="score-numbers">
@@ -105,113 +109,142 @@
           <div class="score-team" id="scoreAwayName"></div>
         </div>
 
-        <!-- OLAY ALANI -->
+        <!-- OLAY YÖNETİMİ -->
         <div class="events-row">
           <div class="events-team">
             <div class="events-title" id="eventsHomeTitle"></div>
-            <select id="eventHomePlayer" class="events-select"></select>
-
+            <select id="eventHomePlayer" class="events-select">
+              <option value="">Oyuncu seç</option>
+            </select>
             <div class="events-buttons">
               <button id="btnHomeGoal" class="btn-event-goal">Gol</button>
-              <button id="btnHomeYellow" class="btn-event-yellow">Sarı</button>
-              <button id="btnHomeRed" class="btn-event-red">Kırmızı</button>
+              <button id="btnHomeYellow" class="btn-event-yellow">Sarı Kart</button>
+              <button id="btnHomeRed" class="btn-event-red">Kırmızı Kart</button>
             </div>
-
-            <div id="eventsHomeLog" class="events-log"></div>
+            <div class="events-log" id="eventsHomeLog"></div>
           </div>
 
           <div class="events-team">
             <div class="events-title" id="eventsAwayTitle"></div>
-            <select id="eventAwayPlayer" class="events-select"></select>
-
+            <select id="eventAwayPlayer" class="events-select">
+              <option value="">Oyuncu seç</option>
+            </select>
             <div class="events-buttons">
               <button id="btnAwayGoal" class="btn-event-goal">Gol</button>
-              <button id="btnAwayYellow" class="btn-event-yellow">Sarı</button>
-              <button id="btnAwayRed" class="btn-event-red">Kırmızı</button>
+              <button id="btnAwayYellow" class="btn-event-yellow">Sarı Kart</button>
+              <button id="btnAwayRed" class="btn-event-red">Kırmızı Kart</button>
             </div>
-
-            <div id="eventsAwayLog" class="events-log"></div>
+            <div class="events-log" id="eventsAwayLog"></div>
           </div>
         </div>
 
-        <h2>İki Takımın Dizilişi</h2>
+        <!-- İKİ TAKIM SAHA DİZİLİŞİ -->
+        <h2>İki Takımın Kadro Dizilişi</h2>
         <div class="pitches-row">
           <div class="pitch-wrapper">
             <div class="pitch-title" id="detailHomeTitle"></div>
-            <div class="pitch" id="pitchHome"><div class="pitch-line"></div></div>
-            <div class="bench"><div class="bench-title">Yedekler</div><div id="benchHome"></div></div>
+            <div class="pitch" id="pitchHome">
+              <div class="pitch-line"></div>
+            </div>
+            <div class="bench">
+              <div class="bench-title">Yedekler</div>
+              <div class="bench-list" id="benchHome"></div>
+            </div>
           </div>
 
           <div class="pitch-wrapper">
             <div class="pitch-title" id="detailAwayTitle"></div>
-            <div class="pitch" id="pitchAway"><div class="pitch-line"></div></div>
-            <div class="bench"><div class="bench-title">Yedekler</div><div id="benchAway"></div></div>
+            <div class="pitch" id="pitchAway">
+              <div class="pitch-line"></div>
+            </div>
+            <div class="bench">
+              <div class="bench-title">Yedekler</div>
+              <div class="bench-list" id="benchAway"></div>
+            </div>
           </div>
         </div>
 
         <div style="text-align:right; margin-top:10px;">
-          <button class="btn-small" id="btnOpenInstagram">Instagram Maç Görseli</button>
+          <button class="btn-small" id="btnOpenInstagram">Instagram Görseli</button>
         </div>
       </div>
     </section>
 
-    <!-- INSTAGRAM GÖRSELİ -->
+    <!-- INSTAGRAM GÖRSEL OLUŞTURMA -->
     <section id="screen-instagram" class="screen">
-      <button class="btn-back" id="btnInstaBack">&larr; Maç Detayına Dön</button>
+      <button class="btn-back" id="btnInstaBack">&larr; Geri</button>
 
       <div class="card">
-        <h2>Instagram Görseli Oluştur</h2>
+        <h2>Instagram Maç Görseli</h2>
 
         <input type="file" id="instaPhotoInput" accept="image/*" style="margin-bottom:10px;">
 
         <div class="insta-wrapper">
-          <div id="instaFrame" class="insta-frame"></div>
+          <div class="insta-frame" id="instaFrame">
+            <img src="elitliglogo.png" class="insta-logo" />
+
+            <div class="insta-photo-wrapper">
+              <img id="instaPhoto" class="insta-photo" src="">
+            </div>
+
+            <div class="insta-result-title">MAÇ SONUCU</div>
+
+            <div class="insta-score-box">
+              <div class="team-left" id="instaHomeName"></div>
+              <div class="score-main" id="instaScore"></div>
+              <div class="team-right" id="instaAwayName"></div>
+            </div>
+
+            <div class="insta-events-row">
+              <div class="insta-events" id="instaHomeEvents"></div>
+              <div class="insta-events" id="instaAwayEvents"></div>
+            </div>
+
+            <div class="insta-bottom" id="instaBottomInfo"></div>
+          </div>
         </div>
 
         <button class="btn-primary" id="btnInstaDownload">Görseli İndir</button>
       </div>
     </section>
 
-    <!-- ADMIN MAÇ GİRİŞİ -->
+    <!-- MAÇ GİRİŞ (ADMİN) -->
     <section id="screen-match-admin" class="screen">
-
       <div id="matchAdminLoginCard" class="card">
-        <h2>Maç Girişi</h2>
+        <h2>Maç Girişi - Admin</h2>
+
         <label>Kullanıcı Adı</label>
-        <input id="matchAdminUser" type="text" />
+        <input id="matchAdminUser" type="text">
 
         <label>Şifre</label>
-        <input id="matchAdminPass" type="password" />
+        <input id="matchAdminPass" type="password">
 
-        <button id="btnMatchLogin" class="btn-primary">Giriş Yap</button>
+        <button class="btn-primary" id="btnMatchLogin">Giriş Yap</button>
       </div>
 
       <div id="matchAdminPanelCard" class="card" style="display:none;">
-        <h2>Yeni Maç Ekle</h2>
+        <h2>Maç Ekle / Güncelle</h2>
 
         <label>Tarih</label>
-        <input id="matchDate" type="date" />
+        <input id="matchDate" type="date">
 
         <label>Saat</label>
-        <input id="matchTime" type="time" />
+        <input id="matchTime" type="time">
 
-        <label>Ev Sahibi</label>
-        <input id="matchHome" type="text" />
+        <label>Ev Sahibi Takım</label>
+        <input id="matchHome" type="text">
 
-        <label>Deplasman</label>
-        <input id="matchAway" type="text" />
+        <label>Deplasman Takım</label>
+        <input id="matchAway" type="text">
 
         <label>Saha</label>
-        <input id="matchField" type="text" />
+        <input id="matchField" type="text">
 
-        <button id="btnAddMatch" class="btn-primary">Maçı Ekle</button>
+        <button class="btn-primary" id="btnAddMatch">Kaydet</button>
 
-        <div style="margin-top:12px;">
-          <h3 style="font-size:13px;">Tüm Maçlar</h3>
-          <div id="matchListAdmin" class="muted"></div>
-        </div>
+        <h3 style="font-size:14px; margin-top:10px;">Tüm Maçlar</h3>
+        <div id="matchListAdmin" class="muted"></div>
       </div>
-
     </section>
 
   </div>
