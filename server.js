@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const supabase = require("./db"); // Supabase client
+const supabase = require("./db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,228 +11,175 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 /* ---------------------------------------------------
-   HANDLER FONKSİYONLARI
+   1) TÜM MAÇLARI GETİR
 --------------------------------------------------- */
+app.get("/api/matches", async (req, res) => {
+  const { data, error } = await supabase
+    .from("matches")
+    .select("*")
+    .order("id", { ascending: false });
 
-// 1) Tüm maçları getir
-const getMatches = async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from("matches")
-      .select("*")
-      .order("id", { ascending: false });
-
-    if (error) return res.status(500).json({ error });
-    res.json(data);
-  } catch (err) {
-    console.error("GET matches hata:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// 2) Maç ekle
-const addMatch = async (req, res) => {
-  try {
-    const { home_team, away_team, date, time, field } = req.body;
-
-    const { data, error } = await supabase.from("matches").insert([
-      { home_team, away_team, date, time, field }
-    ]);
-
-    if (error) return res.status(500).json({ error });
-    res.json({ success: true, match: data[0] });
-  } catch (err) {
-    console.error("POST matches hata:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
+  if (error) return res.status(500).json({ error });
+  res.json(data);
+});
 
 /* ---------------------------------------------------
-   3) KADRO KAYDET  (ESKİ + YENİ FRONTEND UYUMLU)
+   2) MAÇ EKLE
 --------------------------------------------------- */
-const saveLineup = async (req, res) => {
+app.post("/api/matches", async (req, res) => {
+  const { home_team, away_team, date, time, field } = req.body;
+
+  const { data, error } = await supabase.from("matches").insert([
+    { home_team, away_team, date, time, field }
+  ]);
+
+  if (error) return res.status(500).json({ error });
+  res.json({ success: true, match: data[0] });
+});
+
+/* ---------------------------------------------------
+   3) KADRO KAYDET (FRONTEND İLE TAM UYUMLU)
+   POST /api/matches/:id/lineups
+--------------------------------------------------- */
+app.post("/api/matches/:match_id/lineups", async (req, res) => {
   try {
-    const matchId =
-      req.body.match_id ??
-      req.body.matchId ??
-      req.body.match_id?.toString();
+    const match_id = Number(req.params.match_id);
 
-    const teamSide = req.body.team_side ?? req.body.teamSide;
-    const teamName = req.body.team_name ?? req.body.teamName;
-    const players =
-      req.body.players ?? req.body.kadro ?? req.body.lineup ?? null;
+    const team_side = req.body.team_side;
+    const team_name = req.body.team_name;
+    const players = req.body.players;
 
-    if (!matchId || !teamSide || !teamName || !players) {
-      return res.status(400).json({
-        error:
-          "Eksik veri: matchId/match_id, teamSide/team_side, teamName/team_name veya players eksik."
-      });
+    if (!match_id || !team_side || !team_name || !players) {
+      return res.status(400).json({ error: "Eksik bilgi gönderildi" });
     }
 
     const { error } = await supabase.from("lineups").upsert([
       {
-        match_id: Number(matchId),
-        team_side: teamSide,
-        team_name: teamName,
+        match_id,
+        team_side,
+        team_name,
         players_json: JSON.stringify(players)
       }
     ]);
 
-    if (error) {
-      console.error("Supabase lineups insert/upsert hata:", error);
-      return res.status(500).json({ error });
-    }
+    if (error) return res.status(500).json({ error });
 
     res.json({ success: true });
-  } catch (err) {
-    console.error("POST lineups genel hata:", err);
-    res.status(500).json({ error: err.message });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
-};
+});
 
 /* ---------------------------------------------------
-   4) MAÇA AİT KADROLARI GETİR (ESKİ + YENİ UYUMLU)
+   4) MAÇA AİT KADROLARI GETİR
+   GET /api/matches/:id/lineups
 --------------------------------------------------- */
-const getLineups = async (req, res) => {
+app.get("/api/matches/:match_id/lineups", async (req, res) => {
   try {
-    const matchId =
-      req.params.match_id ??
-      req.params.id ??
-      req.query.matchId;
-
-    if (!matchId) {
-      return res
-        .status(400)
-        .json({ error: "match_id veya matchId parametresi gerekli" });
-    }
+    const match_id = Number(req.params.match_id);
 
     const { data, error } = await supabase
       .from("lineups")
       .select("*")
-      .eq("match_id", matchId);
+      .eq("match_id", match_id);
 
     if (error) return res.status(500).json({ error });
 
-    const formatted = data.map((l) => ({
-      ...l,
-      players: JSON.parse(l.players_json)
-    }));
+    const response = {
+      home: null,
+      away: null
+    };
 
-    res.json(formatted);
-  } catch (err) {
-    console.error("GET lineups hata:", err);
-    res.status(500).json({ error: err.message });
+    data.forEach(row => {
+      const parsed = JSON.parse(row.players_json);
+      if (row.team_side === "home") {
+        response.home = { players: parsed };
+      }
+      if (row.team_side === "away") {
+        response.away = { players: parsed };
+      }
+    });
+
+    res.json(response);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
-};
+});
 
 /* ---------------------------------------------------
    5) OLAY EKLE
+   POST /api/matches/:id/events
 --------------------------------------------------- */
-const addEvent = async (req, res) => {
-  try {
-    const { match_id, team_side, event_type, player_group, player_index } =
-      req.body;
+app.post("/api/matches/:match_id/events", async (req, res) => {
+  const match_id = Number(req.params.match_id);
+  const { team_side, event_type, player_group, player_index } = req.body;
 
-    const { error } = await supabase.from("events").insert([
-      {
-        match_id,
-        team_side,
-        event_type,
-        player_group,
-        player_index
-      }
-    ]);
+  const { data, error } = await supabase.from("events").insert([
+    {
+      match_id,
+      team_side,
+      event_type,
+      player_group,
+      player_index
+    }
+  ]);
 
-    if (error) return res.status(500).json({ error });
-    res.json({ success: true });
-  } catch (err) {
-    console.error("POST events hata:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
+  if (error) return res.status(500).json({ error });
+
+  res.json({ success: true, id: data[0].id });
+});
 
 /* ---------------------------------------------------
-   6) MAÇA AİT OLAYLARI GETİR
+   6) OLAYLARI GETİR
+   GET /api/matches/:id/events
 --------------------------------------------------- */
-const getEvents = async (req, res) => {
-  try {
-    const { match_id } = req.params;
+app.get("/api/matches/:match_id/events", async (req, res) => {
+  const match_id = Number(req.params.match_id);
 
-    const { data, error } = await supabase
-      .from("events")
-      .select("*")
-      .eq("match_id", match_id)
-      .order("id", { ascending: true });
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("match_id", match_id)
+    .order("id", { ascending: true });
 
-    if (error) return res.status(500).json({ error });
-    res.json(data);
-  } catch (err) {
-    console.error("GET events hata:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
+  if (error) return res.status(500).json({ error });
+
+  const response = {
+    home: [],
+    away: []
+  };
+
+  data.forEach(ev => {
+    const item = {
+      id: ev.id,
+      type: ev.event_type,
+      group: ev.player_group,
+      index: ev.player_index
+    };
+
+    if (ev.team_side === "home") response.home.push(item);
+    if (ev.team_side === "away") response.away.push(item);
+  });
+
+  res.json(response);
+});
 
 /* ---------------------------------------------------
-   7) TEK MAÇ DETAYINI GETİR
+   7) OLAY SİL – FRONTEND DELETE BUTONU İÇİN
+   DELETE /api/events/:id
 --------------------------------------------------- */
-const getMatchDetail = async (req, res) => {
-  try {
-    const { id } = req.params;
+app.delete("/api/events/:id", async (req, res) => {
+  const eventId = Number(req.params.id);
 
-    const { data, error } = await supabase
-      .from("matches")
-      .select("*")
-      .eq("id", id)
-      .single();
+  const { error } = await supabase.from("events").delete().eq("id", eventId);
 
-    if (error) return res.status(500).json({ error });
-    res.json(data);
-  } catch (err) {
-    console.error("GET match detail hata:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
+  if (error) return res.status(500).json({ error });
+  res.json({ success: true });
+});
 
 /* ---------------------------------------------------
-   ROUTELAR
---------------------------------------------------- */
-
-// Maç listesi
-app.get("/matches", getMatches);
-app.get("/api/matches", getMatches);
-
-// Maç ekle
-app.post("/matches", addMatch);
-app.post("/api/matches", addMatch);
-
-// Kadro kaydet
-app.post("/lineups", saveLineup);
-app.post("/api/lineups", saveLineup);
-
-// Kadroları getir (direkt)
-app.get("/lineups/:match_id", getLineups);
-app.get("/api/lineups/:match_id", getLineups);
-app.get("/api/lineups", getLineups); // ?matchId= ile
-
-// Kadroları getir (maç üzerinden: /api/matches/1/lineups)
-app.get("/matches/:match_id/lineups", getLineups);
-app.get("/api/matches/:match_id/lineups", getLineups);
-
-// Olay ekle
-app.post("/events", addEvent);
-app.post("/api/events", addEvent);
-
-// Olayları getir
-app.get("/events/:match_id", getEvents);
-app.get("/api/events/:match_id", getEvents);
-
-// Maç detayı
-app.get("/match/:id", getMatchDetail);
-app.get("/api/match/:id", getMatchDetail);
-
-/* ---------------------------------------------------
-   SERVER ÇALIŞTIR
+   SUNUCU
 --------------------------------------------------- */
 app.listen(PORT, () => {
-  console.log(`Supabase bağlı! Sunucu çalışıyor: ${PORT}`);
+  console.log("Supabase bağlı! Sunucu çalışıyor:", PORT);
 });
