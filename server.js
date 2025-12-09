@@ -214,6 +214,10 @@ app.get("/lineups/:match_id", getLineups);
 app.get("/api/lineups/:match_id", getLineups);
 app.get("/api/lineups", getLineups); // ?matchId= ile kullanılabilir
 
+// Maç üzerinden kadroları getir (örn: /api/matches/1/lineups)
+app.get("/matches/:match_id/lineups", getLineups);
+app.get("/api/matches/:match_id/lineups", getLineups);
+
 // Olay ekle
 app.post("/events", addEvent);
 app.post("/api/events", addEvent);
@@ -232,3 +236,4 @@ app.get("/api/match/:id", getMatchDetail);
 app.listen(PORT, () => {
   console.log(`Supabase bağlı! Sunucu çalışıyor: ${PORT}`);
 });
+
