@@ -1,13 +1,4 @@
-/* ============================================================
-   ELİT LİG – STYLES.CSS (FINAL VERSION)
-   Sistem: Kadro – Sahalar – Olay Paneli – Instagram Görseli – Admin Panel
-   ============================================================ */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -21,14 +12,13 @@ body {
   margin: 0 auto;
 }
 
-/* ------------------------------------------------------------
-   NAV BAR
-------------------------------------------------------------- */
-
+/* ------------------------------------------------------
+   NAVIGATION
+------------------------------------------------------ */
 .nav {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .nav-btn {
@@ -41,18 +31,18 @@ body {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .nav-btn.active {
   background: #4f46e5;
-  color: #e5e7eb;
+  color: #fff;
   border-color: #6366f1;
 }
 
-/* ------------------------------------------------------------
-   GLOBAL STYLES
-------------------------------------------------------------- */
-
+/* ------------------------------------------------------
+   GENERAL UI
+------------------------------------------------------ */
 h1 {
   font-size: 20px;
   text-align: center;
@@ -73,33 +63,8 @@ p {
   background: #111827;
   border-radius: 12px;
   padding: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   border: 1px solid #1f2937;
-}
-
-.match-card {
-  margin-bottom: 8px;
-  border-bottom: 1px solid #1f2937;
-  padding-bottom: 6px;
-}
-
-.match-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.match-meta {
-  font-size: 11px;
-  color: #9ca3af;
-  margin-bottom: 6px;
-}
-
-.team-buttons {
-  display: flex;
-  gap: 6px;
 }
 
 button {
@@ -115,14 +80,7 @@ button {
   background: #22c55e;
   color: #022c22;
   width: 100%;
-  text-align: center;
   margin-top: 8px;
-}
-
-.btn-team {
-  flex: 1;
-  background: #4f46e5;
-  color: #e5e7eb;
 }
 
 .btn-back {
@@ -130,39 +88,27 @@ button {
   border: 1px solid #4b5563;
   color: #e5e7eb;
   padding: 6px 10px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-size: 12px;
 }
 
 .btn-secondary {
   background: #4f46e5;
-  color: #e5e7eb;
-  width: 49%;
-  text-align: center;
-  margin-top: 8px;
+  color: white;
+  width: 50%;
 }
 
 .btn-exit {
   background: #ef4444;
   color: #fef2f2;
-  width: 49%;
-  text-align: center;
-  margin-top: 8px;
+  width: 50%;
 }
 
 .btn-small {
   background: #4f46e5;
-  color: #e5e7eb;
+  color: #fff;
   padding: 4px 8px;
   font-size: 11px;
-  margin-left: 6px;
-}
-
-label {
-  font-size: 11px;
-  color: #9ca3af;
-  display: block;
-  margin-bottom: 2px;
 }
 
 input, select {
@@ -172,27 +118,61 @@ input, select {
   border: 1px solid #374151;
   background: #020617;
   color: #e5e7eb;
-  font-size: 13px;
   margin-bottom: 6px;
+  font-size: 13px;
 }
 
-/* ------------------------------------------------------------
-   KADRO GİRİŞ FORMU
-------------------------------------------------------------- */
+/* Tarih ve saat ikonları görünür olsun */
+input[type="date"],
+input[type="time"] {
+  color-scheme: dark;
+}
 
+/* ------------------------------------------------------
+   MATCH LIST
+------------------------------------------------------ */
+.match-card {
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.match-meta {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.team-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-team {
+  flex: 1;
+  background: #4f46e5;
+  color: #fff;
+}
+
+/* ------------------------------------------------------
+   PLAYER FORM
+------------------------------------------------------ */
 .players-wrapper {
   max-height: 420px;
   overflow-y: auto;
-  margin-top: 4px;
   padding-right: 4px;
 }
 
 .players-wrapper::-webkit-scrollbar {
   width: 6px;
-}
-
-.players-wrapper::-webkit-scrollbar-track {
-  background: #020617;
 }
 
 .players-wrapper::-webkit-scrollbar-thumb {
@@ -204,7 +184,6 @@ input, select {
   border-bottom: 1px solid #1f2937;
   padding: 6px 4px 8px;
   margin-bottom: 4px;
-  transition: background 0.15s;
 }
 
 .tag {
@@ -212,39 +191,51 @@ input, select {
   font-size: 11px;
   padding: 3px 8px;
   border-radius: 999px;
-  margin-bottom: 4px;
   font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .tag-as {
   background: #f97316;
   color: #111827;
-  border: 1px solid #fed7aa;
 }
 
 .tag-sub {
   background: #0f172a;
   color: #e5e7eb;
-  border: 1px solid #4b5563;
 }
 
 .row-inline {
   display: flex;
   gap: 6px;
-  align-items: center;
 }
 
-.row-inline .p-name {
+.p-name {
   flex: 1;
 }
 
-.row-inline .p-no {
-  max-width: 70px;
+.p-no {
+  width: 70px;
 }
 
-/* ------------------------------------------------------------
-   SAHA TASARIMLARI
-------------------------------------------------------------- */
+/* ------------------------------------------------------
+   FOOTBALL PITCH
+------------------------------------------------------ */
+.pitches-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .pitches-row {
+    flex-direction: row;
+  }
+}
+
+.pitch-wrapper {
+  flex: 1;
+}
 
 .pitch {
   position: relative;
@@ -253,8 +244,8 @@ input, select {
   background: #15803d;
   border-radius: 16px;
   border: 3px solid #f9fafb;
-  margin-top: 4px;
   overflow: hidden;
+  margin-top: 6px;
 }
 
 .pitch-line {
@@ -267,37 +258,36 @@ input, select {
 .player-dot {
   position: absolute;
   transform: translate(-50%, -50%);
-  background: rgba(15,23,42,0.92);
-  color: #e5e7eb;
+  background: rgba(15, 23, 42, 0.92);
+  color: white;
   border-radius: 999px;
   padding: 3px 6px;
+  min-width: 60px;
+  border: 1px solid white;
   text-align: center;
-  min-width: 62px;
-  border: 1px solid #e5e7eb;
 }
 
-.player-dot .pd-pos {
-  font-size: 8px;
+.pd-pos {
+  font-size: 9px;
   opacity: 0.8;
 }
 
-.player-dot .pd-no {
-  font-size: 12px;
+.pd-no {
+  font-size: 13px;
   font-weight: 700;
-  line-height: 1.1;
 }
 
-.player-dot .pd-name {
-  font-size: 12px;
+.pd-name {
+  font-size: 13px;
   font-weight: 800;
-  margin-top: 1px;
 }
 
+/* BENCH */
 .bench {
   margin-top: 8px;
+  padding: 6px;
   background: #020617;
   border-radius: 10px;
-  padding: 6px;
   border: 1px dashed #4b5563;
 }
 
@@ -307,57 +297,42 @@ input, select {
   margin-bottom: 4px;
 }
 
-/* ------------------------------------------------------------
-   DETAIL – 2 TAKIM SAHA
-------------------------------------------------------------- */
-
-.pitches-row {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.bench-list {
+  font-size: 11px;
 }
 
-@media (min-width: 768px) {
-  .pitches-row {
-    flex-direction: row;
-  }
-}
-
-/* ------------------------------------------------------------
-   SKORBOARD ve OLAYLAR
-------------------------------------------------------------- */
-
+/* ------------------------------------------------------
+   EVENT LOG + SCOREBOARD
+------------------------------------------------------ */
 .scoreboard {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 6px 8px;
-  margin-bottom: 8px;
-  border-radius: 10px;
+  align-items: center;
   background: #020617;
+  padding: 8px;
+  border-radius: 10px;
   border: 1px solid #1f2937;
+  margin-bottom: 10px;
 }
 
 .score-team {
+  width: 35%;
   font-size: 12px;
-  font-weight: 600;
-  max-width: 35%;
   text-align: center;
+  font-weight: 600;
 }
 
 .score-numbers {
   font-size: 22px;
   font-weight: 800;
   display: flex;
-  align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .events-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 10px;
 }
 
 @media (min-width: 768px) {
@@ -368,21 +343,16 @@ input, select {
 
 .events-team {
   flex: 1;
-  background: #020617;
+  padding: 8px;
   border-radius: 10px;
-  padding: 6px;
   border: 1px solid #1f2937;
+  background: #020617;
 }
 
 .events-title {
   font-size: 12px;
+  margin-bottom: 4px;
   font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.events-select {
-  width: 100%;
-  margin-bottom: 4px;
 }
 
 .events-buttons {
@@ -393,26 +363,20 @@ input, select {
 
 .btn-event-goal {
   background: #22c55e;
-  color: #022c22;
   flex: 1;
   font-size: 11px;
-  padding: 6px 4px;
 }
 
 .btn-event-yellow {
   background: #eab308;
-  color: #1f2937;
   flex: 1;
   font-size: 11px;
-  padding: 6px 4px;
 }
 
 .btn-event-red {
   background: #ef4444;
-  color: #fef2f2;
   flex: 1;
   font-size: 11px;
-  padding: 6px 4px;
 }
 
 .events-log {
@@ -421,32 +385,13 @@ input, select {
   overflow-y: auto;
 }
 
-.event-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 2px;
-}
-
-.event-delete-btn {
-  background: transparent;
-  border-radius: 999px;
-  border: 1px solid #4b5563;
-  color: #9ca3af;
-  font-size: 10px;
-  padding: 0 6px;
-  cursor: pointer;
-}
-
-/* ------------------------------------------------------------
-   INSTAGRAM TASARIMI
-------------------------------------------------------------- */
-
+/* ------------------------------------------------------
+   INSTAGRAM IMAGE EXPORT
+------------------------------------------------------ */
 .insta-wrapper {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
+  margin-top: 12px;
 }
 
 .insta-frame {
@@ -461,16 +406,13 @@ input, select {
   color: white;
 }
 
-/* Logo */
 .insta-logo {
-  position: absolute;
   width: 140px;
+  position: absolute;
   top: 20px;
   left: 20px;
-  z-index: 10;
 }
 
-/* Kapak fotoğrafı */
 .insta-photo-wrapper {
   width: 100%;
   height: 48%;
@@ -486,72 +428,58 @@ input, select {
   display: none;
 }
 
-/* MAÇ SONUCU */
 .insta-result-title {
   text-align: center;
-  font-size: 58px;
+  font-size: 48px;
   font-weight: 900;
   margin: 10px 0;
-  text-shadow: 0 0 12px rgba(0,0,0,0.7);
 }
 
-/* Skor kutusu */
 .insta-score-box {
-  width: 100%;
-  background: linear-gradient(90deg, #EAEAEA, #FFFFFF, #D9D9D9);
-  border-radius: 16px;
-  padding: 20px 25px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  color: #000;
+  margin-bottom: 10px;
 }
 
-.team-left,
-.team-right {
-  font-size: 34px;
-  font-weight: 700;
+.team-left, .team-right {
   width: 35%;
+  font-size: 30px;
+  font-weight: 700;
   text-align: center;
 }
 
 .score-main {
-  font-size: 70px;
+  width: 30%;
+  font-size: 64px;
   font-weight: 900;
   text-align: center;
-  width: 30%;
 }
 
-/* Olay listeleri */
 .insta-events-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
 }
 
 .insta-events {
   width: 48%;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.3;
-  min-height: 160px;
+  min-height: 150px;
 }
 
-/* Alt bilgi */
 .insta-bottom {
-  margin-top: 15px;
   text-align: center;
-  font-size: 26px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 15px;
 }
 
-/* ------------------------------------------------------------
-   SCREEN VISIBILITY
-------------------------------------------------------------- */
-
-.screen {
-  display: none;
-}
-
-.screen.active {
-  display: block;
-}
+/* ------------------------------------------------------
+   SCREENS
+------------------------------------------------------ */
+.screen { display: none; }
+.screen.active { display: block; }
