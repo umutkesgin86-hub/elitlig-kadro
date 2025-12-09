@@ -52,7 +52,6 @@ const addMatch = async (req, res) => {
 --------------------------------------------------- */
 const saveLineup = async (req, res) => {
   try {
-    // Hem eski hem yeni frontend isimlerini yakalar
     const matchId =
       req.body.match_id ??
       req.body.matchId ??
@@ -92,13 +91,14 @@ const saveLineup = async (req, res) => {
 };
 
 /* ---------------------------------------------------
-   4) MAÇA AİT KADROLARI GETİR  (ESKİ + YENİ UYUMLU)
+   4) MAÇA AİT KADROLARI GETİR (ESKİ + YENİ UYUMLU)
 --------------------------------------------------- */
 const getLineups = async (req, res) => {
   try {
-    // /lineups/:match_id veya /api/lineups?matchId= gibi çağrılarda çalışır
     const matchId =
-      req.params.match_id ?? req.params.id ?? req.query.matchId;
+      req.params.match_id ??
+      req.params.id ??
+      req.query.matchId;
 
     if (!matchId) {
       return res
@@ -209,12 +209,12 @@ app.post("/api/matches", addMatch);
 app.post("/lineups", saveLineup);
 app.post("/api/lineups", saveLineup);
 
-// Kadroları getir
+// Kadroları getir (direkt)
 app.get("/lineups/:match_id", getLineups);
 app.get("/api/lineups/:match_id", getLineups);
-app.get("/api/lineups", getLineups); // ?matchId= ile kullanılabilir
+app.get("/api/lineups", getLineups); // ?matchId= ile
 
-// Maç üzerinden kadroları getir (örn: /api/matches/1/lineups)
+// Kadroları getir (maç üzerinden: /api/matches/1/lineups)
 app.get("/matches/:match_id/lineups", getLineups);
 app.get("/api/matches/:match_id/lineups", getLineups);
 
@@ -236,4 +236,3 @@ app.get("/api/match/:id", getMatchDetail);
 app.listen(PORT, () => {
   console.log(`Supabase bağlı! Sunucu çalışıyor: ${PORT}`);
 });
-
