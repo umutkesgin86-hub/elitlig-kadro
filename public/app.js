@@ -425,3 +425,51 @@ tabMatchAdmin.onclick = () => {
   await fetchMatches();
   renderMatches();
 })();
+
+// -----------------------------
+//  KADROLAR LİSTESİ
+// -----------------------------
+async function renderLineupsList() {
+  lineupsList.innerHTML = "";
+
+  for (const m of matches) {
+    const lu = await fetchLineups(m.id);
+
+    const hasHome = lu.home && lu.home.players;
+    const hasAway = lu.away && lu.away.players;
+
+    if (!hasHome || !hasAway) continue;
+
+    const div = document.createElement("div");
+    div.className = "match-card";
+    div.innerHTML = `
+      <div class="match-header">
+        <span>${m.home_team} vs ${m.away_team}</span>
+        <span>${m.time}</span>
+      </div>
+      <div class="match-meta">${formatMatchDateDisplay(m)} • ${m.field}</div>
+      <button class="btn-primary" data-id="${m.id}">Maçı Aç</button>
+    `;
+
+    lineupsList.appendChild(div);
+  }
+
+  lineupsList.querySelectorAll("button").forEach(btn => {
+    btn.onclick = () => openMatchDetail(btn.dataset.id);
+  });
+}
+// -----------------------------
+//  MATCH ADMIN LOGIN
+// -----------------------------
+btnMatchLogin.onclick = () => {
+  const u = matchAdminUser.value.trim();
+  const p = matchAdminPass.value.trim();
+
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    isMatchAdmin = true;
+    matchAdminLoginCard.style.display = "none";
+    matchAdminPanelCard.style.display = "block";
+  } else {
+    alert("Hatalı kullanıcı adı veya şifre");
+  }
+};
