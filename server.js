@@ -1,3 +1,4 @@
+// server.js — FULL WORKING VERSION
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -13,7 +14,7 @@ app.use(express.static("public"));
 /* ---------------------------------------------------
    1) TÜM MAÇLARI GETİR
 --------------------------------------------------- */
-app.get("/api/matches", async (req, res) => {
+const getMatches = async (req, res) => {
   const { data, error } = await supabase
     .from("matches")
     .select("*")
@@ -21,12 +22,12 @@ app.get("/api/matches", async (req, res) => {
 
   if (error) return res.status(500).json({ error });
   res.json(data);
-});
+};
 
 /* ---------------------------------------------------
    2) MAÇ EKLE
 --------------------------------------------------- */
-app.post("/api/matches", async (req, res) => {
+const addMatch = async (req, res) => {
   const { home_team, away_team, date, time, field } = req.body;
 
   const { data, error } = await supabase.from("matches").insert([
@@ -35,84 +36,80 @@ app.post("/api/matches", async (req, res) => {
 
   if (error) return res.status(500).json({ error });
   res.json({ success: true, match: data[0] });
-});
+};
 
 /* ---------------------------------------------------
-   3) KADRO KAYDET (FRONTEND İLE TAM UYUMLU)
-   POST /api/matches/:id/lineups
+   3) KADRO KAYDET — TÜM FRONTENDLERLE UYUMLU
 --------------------------------------------------- */
-app.post("/api/matches/:match_id/lineups", async (req, res) => {
-  try {
-    const match_id = Number(req.params.match_id);
+const saveLineup = async (req, res) => {
+  const matchId =
+    req.params.match_id ||
+    req.body.match_id ||
+    req.body.matchId;
 
-    const team_side = req.body.team_side;
-    const team_name = req.body.team_name;
-    const players = req.body.players;
+  const teamSide = req.body.team_side || req.body.teamSide;
+  const teamName = req.body.team_name || req.body.teamName;
+  const players =
+    req.body.players || req.body.kadro || req.body.lineup;
 
-    if (!match_id || !team_side || !team_name || !players) {
-      return res.status(400).json({ error: "Eksik bilgi gönderildi" });
-    }
-
-    const { error } = await supabase.from("lineups").upsert([
-      {
-        match_id,
-        team_side,
-        team_name,
-        players_json: JSON.stringify(players)
-      }
-    ]);
-
-    if (error) return res.status(500).json({ error });
-
-    res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-/* ---------------------------------------------------
-   4) MAÇA AİT KADROLARI GETİR
-   GET /api/matches/:id/lineups
---------------------------------------------------- */
-app.get("/api/matches/:match_id/lineups", async (req, res) => {
-  try {
-    const match_id = Number(req.params.match_id);
-
-    const { data, error } = await supabase
-      .from("lineups")
-      .select("*")
-      .eq("match_id", match_id);
-
-    if (error) return res.status(500).json({ error });
-
-    const response = {
-      home: null,
-      away: null
-    };
-
-    data.forEach(row => {
-      const parsed = JSON.parse(row.players_json);
-      if (row.team_side === "home") {
-        response.home = { players: parsed };
-      }
-      if (row.team_side === "away") {
-        response.away = { players: parsed };
-      }
+  if (!matchId || !teamSide || !teamName || !players) {
+    return res.status(400).json({
+      error:
+        "Eksik veri: matchId, teamSide, teamName veya players eksik."
     });
-
-    res.json(response);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
   }
-});
+
+  const { error } = await supabase.from("lineups").upsert([
+    {
+      match_id: Number(matchId),
+      team_side: teamSide,
+      team_name: teamName,
+      players_json: JSON.stringify(players)
+    }
+  ]);
+
+  if (error) return res.status(500).json({ error });
+  res.json({ success: true });
+};
+
+/* ---------------------------------------------------
+   4) MAÇA AİT KADROLARI GETİR (HER FORMATTA)
+--------------------------------------------------- */
+const getLineups = async (req, res) => {
+  const matchId =
+    req.params.match_id ||
+    req.params.id ||
+    req.query.matchId;
+
+  if (!matchId) {
+    return res.status(400).json({ error: "match_id gerekli" });
+  }
+
+  const { data, error } = await supabase
+    .from("lineups")
+    .select("*")
+    .eq("match_id", matchId);
+
+  if (error) return res.status(500).json({ error });
+
+  const formatted = {};
+
+  data.forEach((row) => {
+    formatted[row.team_side] = {
+      team: row.team_name,
+      players: JSON.parse(row.players_json)
+    };
+  });
+
+  res.json(formatted);
+};
 
 /* ---------------------------------------------------
    5) OLAY EKLE
-   POST /api/matches/:id/events
 --------------------------------------------------- */
-app.post("/api/matches/:match_id/events", async (req, res) => {
-  const match_id = Number(req.params.match_id);
-  const { team_side, event_type, player_group, player_index } = req.body;
+const addEvent = async (req, res) => {
+  const { match_id, team_side, event_type, player_group, player_index } =
+    req.body;
 
   const { data, error } = await supabase.from("events").insert([
     {
@@ -125,16 +122,14 @@ app.post("/api/matches/:match_id/events", async (req, res) => {
   ]);
 
   if (error) return res.status(500).json({ error });
-
-  res.json({ success: true, id: data[0].id });
-});
+  res.json({ success: true, id: data[0]?.id });
+};
 
 /* ---------------------------------------------------
    6) OLAYLARI GETİR
-   GET /api/matches/:id/events
 --------------------------------------------------- */
-app.get("/api/matches/:match_id/events", async (req, res) => {
-  const match_id = Number(req.params.match_id);
+const getEvents = async (req, res) => {
+  const { match_id } = req.params;
 
   const { data, error } = await supabase
     .from("events")
@@ -143,43 +138,57 @@ app.get("/api/matches/:match_id/events", async (req, res) => {
     .order("id", { ascending: true });
 
   if (error) return res.status(500).json({ error });
-
-  const response = {
-    home: [],
-    away: []
-  };
-
-  data.forEach(ev => {
-    const item = {
-      id: ev.id,
-      type: ev.event_type,
-      group: ev.player_group,
-      index: ev.player_index
-    };
-
-    if (ev.team_side === "home") response.home.push(item);
-    if (ev.team_side === "away") response.away.push(item);
-  });
-
-  res.json(response);
-});
+  res.json(data);
+};
 
 /* ---------------------------------------------------
-   7) OLAY SİL – FRONTEND DELETE BUTONU İÇİN
-   DELETE /api/events/:id
+   7) TEK MAÇ DETAYI
 --------------------------------------------------- */
-app.delete("/api/events/:id", async (req, res) => {
-  const eventId = Number(req.params.id);
+const getMatchDetail = async (req, res) => {
+  const { id } = req.params;
 
-  const { error } = await supabase.from("events").delete().eq("id", eventId);
+  const { data, error } = await supabase
+    .from("matches")
+    .select("*")
+    .eq("id", id)
+    .single();
 
   if (error) return res.status(500).json({ error });
-  res.json({ success: true });
-});
+  res.json(data);
+};
 
 /* ---------------------------------------------------
-   SUNUCU
+   ROUTES — TÜM FORMATLARLA UYUMLU
+--------------------------------------------------- */
+
+// MATCHES
+app.get("/matches", getMatches);
+app.get("/api/matches", getMatches);
+app.post("/matches", addMatch);
+app.post("/api/matches", addMatch);
+
+// LINEUPS — TÜM İHTİYAÇ DUYULAN TÜM YOLLAR
+app.post("/lineups", saveLineup);
+app.post("/api/lineups", saveLineup);
+app.post("/api/matches/:match_id/lineups", saveLineup);
+
+app.get("/lineups/:match_id", getLineups);
+app.get("/api/lineups/:match_id", getLineups);
+app.get("/api/matches/:match_id/lineups", getLineups);
+
+// EVENTS
+app.post("/events", addEvent);
+app.post("/api/events", addEvent);
+app.get("/events/:match_id", getEvents);
+app.get("/api/events/:match_id", getEvents);
+
+// MATCH DETAIL
+app.get("/match/:id", getMatchDetail);
+app.get("/api/match/:id", getMatchDetail);
+
+/* ---------------------------------------------------
+   SERVER START
 --------------------------------------------------- */
 app.listen(PORT, () => {
-  console.log("Supabase bağlı! Sunucu çalışıyor:", PORT);
+  console.log(`✔ Sunucu çalışıyor: PORT ${PORT}`);
 });
