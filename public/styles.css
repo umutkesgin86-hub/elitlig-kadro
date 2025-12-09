@@ -1,0 +1,600 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #020617;
+  color: #e5e7eb;
+  padding: 12px;
+}
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* NAV */
+.nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.nav-btn {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  color: #9ca3af;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nav-btn.active {
+  background: #4f46e5;
+  color: #e5e7eb;
+  border-color: #6366f1;
+}
+
+/* GENEL */
+h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+h2 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+p {
+  font-size: 13px;
+  color: #9ca3af;
+}
+.card {
+  background: #111827;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #1f2937;
+}
+.match-card {
+  margin-bottom: 8px;
+  border-bottom: 1px solid #1f2937;
+  padding-bottom: 6px;
+}
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.match-meta {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 6px;
+}
+.team-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #22c55e;
+  color: #022c22;
+  width: 100%;
+  text-align: center;
+  margin-top: 8px;
+}
+.btn-team {
+  flex: 1;
+  background: #4f46e5;
+  color: #e5e7eb;
+}
+.btn-back {
+  background: transparent;
+  border: 1px solid #4b5563;
+  color: #e5e7eb;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.btn-secondary {
+  background: #4f46e5;
+  color: #e5e7eb;
+  width: 49%;
+  text-align: center;
+  margin-top: 8px;
+}
+.btn-exit {
+  background: #ef4444;
+  color: #fef2f2;
+  width: 49%;
+  text-align: center;
+  margin-top: 8px;
+}
+.btn-small {
+  background: #4f46e5;
+  color: #e5e7eb;
+  padding: 4px 8px;
+  font-size: 11px;
+  margin-left: 6px;
+}
+
+label {
+  font-size: 11px;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 2px;
+}
+input, select {
+  width: 100%;
+  padding: 7px 9px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+/* KADRO GİRİŞİ */
+.players-wrapper {
+  max-height: 420px;
+  overflow-y: auto;
+  margin-top: 4px;
+  padding-right: 4px;
+}
+.players-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.players-wrapper::-webkit-scrollbar-track {
+  background: #020617;
+}
+.players-wrapper::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 999px;
+}
+.player-row {
+  border-bottom: 1px solid #1f2937;
+  padding: 6px 4px 8px;
+  margin-bottom: 4px;
+  transition: background 0.15s;
+}
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.tag-as {
+  background: #f97316;
+  color: #111827;
+  border: 1px solid #fed7aa;
+}
+.tag-sub {
+  background: #0f172a;
+  color: #e5e7eb;
+  border: 1px solid #4b5563;
+}
+.row-inline {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.row-inline .p-name {
+  flex: 1;
+}
+.row-inline .p-no {
+  max-width: 70px;
+}
+.row-inline input {
+  margin-bottom: 0;
+}
+
+/* SAHA */
+.pitches-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (min-width: 768px) {
+  .pitches-row {
+    flex-direction: row;
+  }
+}
+.pitch-wrapper {
+  flex: 1;
+}
+.pitch-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.pitch {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background: #15803d;
+  border-radius: 16px;
+  border: 3px solid #f9fafb;
+  margin-top: 4px;
+  overflow: hidden;
+}
+.pitch-line {
+  position: absolute;
+  inset: 6%;
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+}
+.player-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(15,23,42,0.92);
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 3px 6px;
+  text-align: center;
+  min-width: 60px;
+  border: 1px solid #e5e7eb;
+}
+.player-dot .pd-pos {
+  display: block;
+  font-size: 8px;
+  opacity: 0.8;
+}
+.player-dot .pd-no {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.player-dot .pd-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+.shirt-icon {
+  font-size: 11px;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+.bench {
+  margin-top: 8px;
+  background: #020617;
+  border-radius: 10px;
+  padding: 6px;
+  border: 1px dashed #4b5563;
+}
+.bench-title {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+.bench-list {
+  font-size: 11px;
+}
+
+/* EKRANLAR */
+.screen { display: none; }
+.screen.active { display: block; }
+
+.match-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.match-sub {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.info-text {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* OLAYLAR + SKORBOARD */
+.events-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+@media (min-width: 768px) {
+  .events-row {
+    flex-direction: row;
+  }
+}
+.events-team {
+  flex: 1;
+  background: #020617;
+  border-radius: 10px;
+  padding: 6px;
+  border: 1px solid #1f2937;
+}
+.events-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.events-select {
+  width: 100%;
+  margin-bottom: 4px;
+}
+.events-buttons {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.btn-event-goal {
+  background: #22c55e;
+  color: #022c22;
+  flex: 1;
+  font-size: 11px;
+  padding: 6px 4px;
+}
+.btn-event-yellow {
+  background: #eab308;
+  color: #1f2937;
+  flex: 1;
+  font-size: 11px;
+  padding: 6px 4px;
+}
+.btn-event-red {
+  background: #ef4444;
+  color: #fef2f2;
+  flex: 1;
+  font-size: 11px;
+  padding: 6px 4px;
+}
+.events-log {
+  font-size: 11px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.event-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+.event-text {
+  flex: 1;
+}
+.event-delete-btn {
+  background: transparent;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  color: #9ca3af;
+  font-size: 10px;
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: #020617;
+  border: 1px solid #1f2937;
+}
+.score-team {
+  font-size: 12px;
+  font-weight: 600;
+  max-width: 35%;
+  text-align: center;
+}
+.score-numbers {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.muted {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* INSTAGRAM KARE TASARIMI */
+.insta-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.insta-frame {
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 1 / 1;
+  border-radius: 24px;
+  padding: 18px;
+  background: radial-gradient(circle at top left, #7c3aed, #111827 55%, #020617 100%);
+  border: 2px solid #4c1d95;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #f9fafb;
+}
+.insta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+.insta-league {
+  font-weight: 800;
+}
+.insta-date {
+  font-weight: 600;
+}
+.insta-middle {
+  display: grid;
+  grid-template-columns: 1.2fr auto 1.2fr;
+  align-items: center;
+  gap: 10px;
+}
+.insta-team {
+  text-align: center;
+}
+.insta-team-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.insta-team-name {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 800;
+}
+.insta-score-block {
+  text-align: center;
+}
+.insta-score {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+.insta-vs {
+  font-size: 11px;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.9;
+}
+.insta-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.9;
+}
+.insta-field {
+  font-weight: 700;
+}
+.insta-time {
+  font-weight: 600;
+}
+.insta-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.insta-frame {
+  width: 100%;
+  max-width: 1080px;
+  aspect-ratio: 1/1;
+  background: linear-gradient(180deg, #3a0ca3 0%, #4f4f4f 50%, #1a1a1a 100%);
+  border-radius: 24px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+/* Logo */
+.insta-logo {
+  position: absolute;
+  width: 140px;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+/* Kapak fotoğrafı */
+.insta-photo-wrapper {
+  width: 100%;
+  height: 48%;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.insta-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+/* MAÇ SONUCU */
+.insta-result-title {
+  text-align: center;
+  font-size: 58px;
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 12px rgba(0,0,0,0.7);
+}
+
+/* Skor kutusu */
+.insta-score-box {
+  width: 100%;
+  background: linear-gradient(90deg, #EAEAEA, #FFFFFF, #D9D9D9);
+  border-radius: 16px;
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-left, .team-right {
+  font-size: 34px;
+  font-weight: 700;
+  width: 35%;
+  text-align: center;
+}
+
+.score-main {
+  font-size: 70px;
+  font-weight: 900;
+  text-align: center;
+  width: 30%;
+}
+
+/* Olay listeleri */
+.insta-events-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.insta-events {
+  width: 48%;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.3;
+  min-height: 160px;
+}
+
+/* Alt bilgi */
+.insta-bottom {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+}
